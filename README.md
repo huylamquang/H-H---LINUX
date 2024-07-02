@@ -141,7 +141,7 @@
     ```
   - Các option được sử dụng là:
     - `-N`: Hiển thị số dòng có trong tệp
-    - `-F': Sử dụng để xem các file log vì nó theo dõi, tự động cập nhật nội dung.
+    - `-F`: Sử dụng để xem các file log vì nó theo dõi, tự động cập nhật nội dung.
   - Ví dụ:
     ```
     less -N file1
@@ -235,13 +235,87 @@
       sed -i '1a\toilamlab' file1
       ```
       Thêm text toilamlab vào sau dòng 1 của file1 và lưu trực tiếp vào file1.
-- awk
+- awk: Là 1 ngôn ngữ giúp chúng ta thao tác dễ dàng với kiểu dữ liệu có cấu trúc và tạo ra những kết quả được định dạng. Được sử dụng để tìm kiếm và xử lý file text.
+  - Cú pháp:
+    ```
+    awk pattern actions file
+    ```
+    - Với:
+      - pattern là những biểu thức chính quy
+      - actions là những câu lệnh cần thực hiện
+      - file là file cần thực hiện awk
+    - Ví dụ:
+      - Sử dung để in các dòng trong file
+        ```
+        awk '{print}' file1
+        ```
+      - Xử lý trường:
+        Tách các trường nhất định:
+        + $0: Chứa toàn bộ văn bản
+        + $1: Chứa văn bản trường đầu tiên
+        + $2: chứa văn bản trường thứ hai
+        + $(2+3): Kết quả của các biểu thức được sử dụng, đưa ra trường thứ năm
+        + NF: là một biến tích hợp có chứa số lượng các trường trong bản ghi hiện tại. Vì vậy $NF đưa ra trường cuối cùng.
+        ```
+        awk '{print $1}' file1
+        awk '{print $4}' file1
+        ```
+        In ra 3 ký tự đầu tiên của mỗi dòng:
+        ```
+        awk '{print substr($0,1,3)}' file1
+        ```
+      - Lọc các kí tự: Các kí tự được lọc được đặt trong '//'
+        ```
+        awk '/quanghuy/' file1
+        awk '/quanghuy/{print $NF}' file1
+        ```
+        Lọc dựa trên số dòng:
+        ```
+        awk 'NR==2' file1
+        ```
+      - Tìm kiếm:
+        ```
+        awk '/pattern/ {print NR,$0}' file1
+        ``` 
 #### Công cụ vim và byobu
 ##### Vim - Thao tác với văn bản
-- Các chế độ:
+- Các chế độ: Có 4 chế độ bao gồm
+  - Chế độ thường( command line): Được sử dụng để thực hiện các thao tác cơ bản với văn bản chẳng hạn như:
+    - `gg`: Di chuyển trỏ đến đầu tệp
+    - `G`: Di chuyển trỏ đến cuối tệp
+    - `Ctrl + B,F,U,D,Y,E`: Thực hiện các thao tác đến cuộn trang lên xuống
+    - `dd`: Xóa dòng hiện tại
+    - `dw`: Xóa từ hiện tại
+    - `yw`: sao chép từ
+    - `yy`: sao chép dòng
+    - `u`: Hoàn tác | `Ctrl + r`: Tiến tới hành động đã hoàn tác
+    - `i và o`: Bước vào chế độ Insert 
+  - Chế độ chèn( insert): Là chế độ để ta có thể thực hiện các thao tác nhập từ bàn phím làm việc với văn bản.
+  - Chế độ Ex: Là các lệnh được đặt sau dấu "**:**" như:
+    - `:q!`: thoát và không lưu các thao tác
+    - `:w`: lưu các thao tác đã thực hiện
+    - `:wq`: thoát và lưu các thao tác thực hiện
+    - ...
+  - Chế độ Visual: Là chế độ được sử dụng để sao chép, xóa, dán văn bản.
+    - Cách thực diễn ra như sau: Để bước vào chế độ vim ta nhấn `v`. Từ vị trí nhấn `v` ta có thể sử dụng các phím điều hướng để bôi đen đoạn văn bản or sử dụng tổ hợp v + số dòng( tính từ vị trí con trỏ + số dòng). Sau đó nhấn `y` để copy đoạn vừa bôi đen or nhấn `d` để xóa.
+    - Ta hoàn toàn có thể thay thế chuỗi bằng lệnh sed sau khi đã bôi đen với cú pháp như sau: `sed 's/pattern/replace/g' file1`
+    
 ##### Byobu - Duy trì trạng thái làm việc
-- Lý do cần sử dụng
-- Tính năng cơ bản 
+- Byobu là 1 tiện ích để tạo ra các phiên làm việc. Với các tiện ích có thể cần như tạo, sửa xóa, chia đôi màn hình,...
+- Việc sử dụng byobu cho Sys Adm là cần thiết bởi vì nó có thể làm việc với nhiều server cùng lúc và khi thực hiện điều đó ta cần SSH vào nhiều server. Trong quá trình làm việc nếu xảy ra các sự cố như mất điện, hay mất mạng phiên làm việc bị dừng lại thì các kết nối SSH sẽ bị mất nhưng nếu chúng ta sử dụng byobu thì chúng sẽ lưu tất cả bao gồm trạng thái đang làm việc các với các phiên làm việc kết nối với ssh đến server.
+- Các thao tác cơ bản với byobu:
+  - Xem hướng dẫn: `Shift + F1`
+  - Tạo 1 cửa sổ mới theo chiều ngang: `Shift + F2`
+  - Tạo 1 cửa số mới theo chiều dọc: `Ctrl + F2`
+  - Tạo 1 phiên làm việc mới: `Ctrl-Shift + F2` 
+  - Đổi tên: sử dụng `F8`
+  - Chuyển đổi qua lại: sử dụng `Ctrl + F3,F4` or `Shift + F3,F4`
+  - Đóng 1 cửa số hay tab: Sử dụng lệnh `exit`
+  - Tách phiên và không thoát: `Shift + F6` Sẽ tách phiên byobu hiện tại ra khỏi cửa sổ terminal. Điều này cho phép tiếp tục các tác vụ đang chạy trong phiên đó ở chế độ nền, ngay cả khi đóng terminal. Và có thể khôi phục bằng lệnh `byobu attach`.
+  - Tách tất cả các máy khách trừ bạn: `Alt + F6` phù hợp cho việc sử dụng byobu trên máy chủ từ xa. Nó cho phép tách tất cả các kết nối( máy khách) với phiên byobu hiện tại, chỉ giữ lại kết nối của mình.
+  - Kill attach được chọn: `Ctrl + F6` sử dụng để đóng 1 phân vùng cụ thể trong cửa sổ byobu hiện tại.
+  - Xem lịch sử: `F7` và lưu lịch sử thành ảnh chụp màn hình `Shift + F7`và ảnh được lưu tại $BYOBU_RUN_DIR/printscreen.(~/.byobu/sessions/<session_name>).
+  - Mở của số cấu hình byobu-config: `F9` và `Ctrl + F9` sẽ cho chép bạn nhập 1 lệnh và lệnh này sẽ được chạy đồng thời trên tất cả các cửa sổ còn lại và `Shift + F9` Chạy lệnh trong tất cả phân vùng của cửa số Byobu hiện tại.
 ### Tiến trình và các vấn đề liên quan đến tiến trình
 - Các khái niệm cơ bản
 - Các lệnh sử dụng để quản lý và giám sát tiến trình: top, htop, ps
