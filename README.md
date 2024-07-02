@@ -317,8 +317,100 @@
   - Xem lịch sử: `F7` và lưu lịch sử thành ảnh chụp màn hình `Shift + F7`và ảnh được lưu tại $BYOBU_RUN_DIR/printscreen.(~/.byobu/sessions/<session_name>).
   - Mở của số cấu hình byobu-config: `F9` và `Ctrl + F9` sẽ cho chép bạn nhập 1 lệnh và lệnh này sẽ được chạy đồng thời trên tất cả các cửa sổ còn lại và `Shift + F9` Chạy lệnh trong tất cả phân vùng của cửa số Byobu hiện tại.
 ### Tiến trình và các vấn đề liên quan đến tiến trình
-- Các khái niệm cơ bản
+- Tiến trình là 1 quá trình tiến hành 1 công việc và cần tài nguyên hỗ trợ, tính toán từ CPU
+- Load average: Tải trung bình là số lượng tiến trình cần tài nguyên tính toán từ CPU.
+- Chỉ số tận dụng CPU là việc sử dụng tiến trình nhiều hay ít. Ứng với mỗi core sẽ có 1 tiến trình sử dụng và tiến trình đó sử dụng khả năng của CPU làm sao mà tối ưu nhất.
 - Các lệnh sử dụng để quản lý và giám sát tiến trình: top, htop, ps
+  - top: Hiển thị tổng quan các thông tin về RAM, CPU, PID, Load average, các thông số liên quan 1 cách chi tiết và cụ thể của từng tiến trình.
+    - Các option hiển thị thông tin:
+      + Với CPU: Nhấn `P` để xem tiến trình chiếm nhiều CPU nhất.
+      + Với Mem: Nhấn `M` để xem tiến trình chiếm nhiều RAM nhất.
+      + Với ID: Nhấn `N` để sắp xếp theo ID
+      + Với Time: Nhấn `T` để sắp xếp theo thời gian sử dụng tiến trình
+    - Các tham số có trong lệnh top:
+      + Dòng 1:
+        - Hiển thị về thời gian hiện tại - Thời gian đã sử dụngg.
+        - Số lượng user sử dụng
+        - Load Average: Tải trung bình là 1 tham số cần chú ý. Là số lượng tiến trình cần tài nguyên tính tóa từ CPU trong khoảng thời gian(5p, 10p, 15p). Lượng tiến trình cần duy trì trong khoảng từ 0 đến số lượng CPU có thể có, tức là nếu CPU có 6 core thì lượng tiến trình ở mức cho phép là 1-6 tiến trình. Nếu vượt quá thì sẽ có 1 số vấn đề xảy ra:
+          - Hiệu suất hệ thống giảm vì có quá nhiều tiến trình phải đợi CPU xử lý, mỗi tiến trình sẽ được chia nhỏ thời gian xử lý.
+          - Tăng thời gian phản hồi: Các yêu cầu của người dùng chờ được phản hồi sẽ tăng lên đáng kể vì CPU đang bận xử lý các tiến trình.
+          - Tăng nhiệt độ CPU vì CPU hoạt động ở công suất tối đa.
+          - Swap khi RAM không đủ là việc sử dụng bộ nhớ Swap để lưu trữ tất cả các tiến trình đang chạy, lưu trữ tạm thời 1 phần dữ liệu của các tiến trình, giảm hiệu suất vì bộ nhớ Swap chậm hơn nhiều so với RAM. Nó được lấy từ ổ cứng hoặc từ SSD.
+          - Khả năng treo máy: Quá tải hệ thống.
+        - Những yếu tố ảnh hướng đến load average:
+          - Cpu Utilization( tận dụng CPU): Nếu lượng CPU lớn hơn 100% và load average vượt quá số CPU đang có thì ta có thể kết luận rằng loadaveg cao bởi lượng lơn các tiến trình đang running hoặc đang đợi CPU xử lý.
+          - Với disk I/O, Network Traffic: Nếu lượng CPU sử dụng vẫn bình thường( tức không quá cao) nhưng loadavg vẫn cao hơn số CPU đang có. Ta có thể kết luận có thể disk I/O or Network Traffic hoặc cả 2 yếu tố chính gây ra tải cao cho hệ thống.
+          - Tiến trình đi vào CPU để xử lý. CPU sẽ truy cập vào disk để lấy thông tin các rows. Tại thời điểm này CPU sẽ Idle và chờ disk phản hồi, đây chính là thời điểm waiting on disk.
+        - Tổng quát lại : nếu phần trăm I/O wait lớn (1/số lượng cpu) * 100% thì đây là lúc bạn cần phải xem xét lại disk I/O hệ thống của mình. High I/O wait phụ thuộc vào số lượng CPU server đang có. 50% iowait của server 2 cpu chỉ tương đương với 12.5% iowait trên server có 8 cpu. Tỉ lệ nghịch với số lượng cpu của server. Số lượng CPU càng cao thì iowait càng thấp.
+      + Dòng 2:
+        - Tổng số lượng tiến trình
+        - Số tiến trình đang chạy
+        - Số tiến trình trong trạng thái nghỉ ngơi
+        - Số tiến trình bị dừng
+        - Số tiến trình đã hoàn thành công việc nhưng chưa được tiến trình mẹ xóa nó khỏi bảng tiến trình.
+      + Dòng 3:
+        - %CPU do User sử dụng
+        - %CPU do hệ thống sử dụng
+        - Giá trị chuẩn - Biểu thức mức độ ưu tiên: Các tiến trình có giá trị càng chuẩn mức độ ưu tiên càng thấp.
+        - Thời gian mà CPU nhàn rỗi
+        - Thao tác I/O: Là quá trình CPU truy cập vào disk và chờ disk phản hồi
+        - Tiến trình phục vụ ngắt phần cứng
+        - Tiến trinh phục vụ ngắt phần mềm: Là các tiến trình cần chờ đợi các thành phần khác như hardware, software để tiếp tục thực thi tiến trình.
+        - Các tiến trình phục vụ các tác vụ ngắt của máy ảo khác trong môi trường ảo.
+      + Dòng 4:
+        - Tổng dung lượng Mem có
+        - Số Mem chưa được sử dụng
+        - Số Mem đã đang được sử dụng
+        - Bộ nhớ đệm và được đệm và lưu vào bộ nhớ đệm
+      + Dòng 5:
+        - Tổng dung lượng hoán đổi
+        - Số dung lượng đổi chưa được sử dụng
+        - Số dung lượng hoán đổi đã sử dụng
+        - Số lượng Mem có sẵn.
+      + Dòng 6:
+        - PID: ID của tiến trình
+        - USER: Tên của user sử dujg tiến trình
+        - PR: Là mức độ ưu tiên của tiến trình. Tính toán dựa trên nice value và các yếu tố khác. Thay đổi theo thời gian, giá trị từ 0 -> 39( 0 là ưu tiên cao nhất).
+        - NI: Nice value là giá trị sử dụng để điều chỉnh mức độ ưu tiên của tiến trình. Giá trị sử dụng để cố định và không đổi theo thời gian, giá trị từ -20 -> 19( 0 là giá trị mặc định).
+        - VIRT: Tổng dung lượng bộ nhớ được sử dụng bởi tiến trình(bao gồm cả bộ nhớ Swap).
+        - SHR: Bộ nhớ dùng chung của tiến trình với các tiến trình khác.
+        - S(State): Trạng thái của tiến trình:
+          - S - Sleep( ngủ, chờ 1 sự kiện kết thúc)
+          - R - Run( Đang thực thi or đang chờ để thực thi)
+          - I - Edle( Nhàn rỗi - Không làm gì).
+          - Z - Zombie( Các tiens tình con bị kết thúc có CTDL chưa được xóa khỏi bảng tiến trình).
+   - Lệnh htop: Là 1 lệnh được sử dụng để giám sát tiến trình, hiển thị các thông số về cpu, ram, loadavg, ... tương tự như top nhưng được hiển thị bằng các mầu sắc 1 cách trực quan hơn.
+     - Trong htop có thể sử dụng phím F1 để xme các hướng dẫn cụ thể hơn
+     - Các màu sắc được biểu thị trong htop:
+       - Với CPU:
+         - Xanh lam: Các tiến trình với độ ưu tiên thấp
+         - Xanh lục: Các tiến trình người dùng
+         - Đỏ: Các tiến trình hạt nhân
+         - Vàng: Thời gian IRQ( ngắt phần cứng)
+         - Đỏ tươi:Thời gian Soft IRQ( Ngắt phần mềm)
+         - Xám: Thời gian chờ IO
+       - Với Mem:
+         - Xanh lục: Bộ nhớ đã dùng
+         - Xanh dương: Bộ nhớ buffers
+         - Vàng: Bộ nhớ cache
+       - Với Swap:
+         - Đỏ: Bộ nhớ swap đã sử dụng
+         - Vàng: Bộ nhớ cache đã sử dụng
+         - Xám:
+   - Lệnh kill và kill -9 cùng các loại tín hiệu:
+     - Lệnh kill và kill -9
+       - `kill [PID]` là kiểu thường, kiểu tín hiệu là sigterm, cho phép tiến trình hoàn thành và giải phóng tài nguyên, có khả năng lựa chọn xử lý tín hiệu.
+       - `kill -9 [PID]` Là kiểu dứt điểm, kiểu tín hiệu là sigkill, bắt buộc chấm dứt ngay lập tức, không cho cơ hội làm thêm gì cả.
+     - Các loại tín hiệu phổ biến:
+       - Tín hiệu KILL: Các tín hiệu khác có thể chọn xử lý tín hiệu được đưa đến, có thể bỏ qua các tín hiệu đó còn tín hiệu kill là chấm dứt hoàn toàn. Tức là Kernel sẽ ngay lập tức chấm dứt tiến trình.
+       - Tín hiệu CONT: Khôi phục tiến trình sau khi sử dụng STOP và TSTP, sử dụng lệnh fg và bg để gửi.
+       - Tín hiệu TSTP: Đây là tín hiệu được gửi bởi thiết bị đầu cuối khi nhấn `Ctrl + Z`. Không giống như STOP, tín hiệu TSTP được chương trình nhận nhưng chương trình có thể chọn bỏ qua nó
+   - Lệnh ps: Hiển thị các thông tin về tiến trình nhưng tại 1 thời điểm cố định
+     - Các tùy chọn:
+       - ps x: hiển thị các tiến trình hiện có
+       - ps aux: Hiển thị tất cả các tiến trình đang chạy với những thông in chi tiết:
+         - User: User sử dụng tiến trình
+         - 
 ### Phần mềm và các vấn đề liên quan đến phần mềm
 - Các khái niệm cơ bản liên quan đến phần mềm
 - Các trình quản lý phần mềm 
