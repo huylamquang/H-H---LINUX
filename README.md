@@ -485,8 +485,96 @@
     - B3: mở tệp /etc/rc.local sau đó thêm dòng chứa đường dẫn của tệp script vào cuối: `/home/huylq/myscript.sh`.
     - B4: Khởi động lại máy chủ: `sudo reboot`
 ### FS, Partition, Mount và các vấn đề liên quan
-- Các khái niệm về FS Partition và Mount
-- Các lệnh được sử dụng và chức năng cách sử dụng chúng
+#### FileSystem
+- FS (hệ thống tệp tin): là 1 dạng cấu trúc dữ liệu dược sử dụng bởi hệ điều hành để tổ chức và quản lý các tệp tin trên 1 thiết bị lưu trữ như ổ cứng, ổ đĩa, thẻ nhớ. Bao gồm các chức năng:
+  - Lưu trữ dữ liệu: Lưu trữ dữ liệu dưới dạng tệp và thư mục
+  - Tổ chức dữ liệu: Được tổ chức theo cấu trúc phân cấp, giúp dễ dàng tìm kiếm và quản lý tệp
+  - Quản lý quyền truy cập: Kiểm soát quyền truy cập vào tệp tin, đảm bảo rằng chỉ người dùng được ủy quyền mới có thể truy cập và sửa đổi.
+  - Bảo vệ dữ liệu: Bao gồm các tính năng sao lưu và phục hồi để bảo vệ dữ liệu khỏi mất or hỏng.
+  - Các loạt hệ thống tệp tin được sử dụng phổ biến cho server Linux:
+    - Ext4: Là 1 dạng FS có khả năng journaling, tương thích phần cứng, dung lượng cao, hiệu suất cao,... Không giới hạn về thư mục con trong 1 thư mục, có kích thước cố định. Sử dụng kĩ thuật phân bố trễ tức là nó sẽ trì hoãn phân bố các block trước khi dữ liệu được đưa vào để có thể tối ưu hóa không gian lưu trữ và chống phân mảnh dữ liệu. Phù hợp với những tệp nhỏ, bảo vệ hệ thống tệp và thư mục mở rộng. Phù hợp với máy chủ tệp trung tâm để chia sẻ nhóm. 
+    - XFS: Là 1 FS có khả năng journaling, và vô số tính năng tiên tiến như Snapshots, Quotas, ACLs, ... Phù hợp với các hệ thống tệp tin lưu trữ dữ liệu dung lượng lớn or có nhiều tập tin nhỏ, hiệu suất truy cập dữ liệu cao. Phù hợp với Khoa học dữ liệu(ML, DL, …). Phù hợp với việc truy xuất các tệp lớn mà không ảnh hưởng đến hiệu suất.
+  - Khả năng journaling và phân bố trễ trên Ext4:
+    - Tính năng journaling: Là quá trình ghi nhật ký các thay đổi diễn ra. Cụ thể nó hoạt động như sau: Giả sử trong quá trình làm việc mà bị mất điện đột ngột hay xảy ra lỗi phần mềm. Thì nó sẽ hoạt động bằng cách ghi chép các thay đổi được thực hiện với hệ thống tệp trước khi chúng được ghi chép vào đĩa thực tế.
+      - Ghi nhật ký các thay đổi: Khi đang thực hiện thao tác ghi or xóa dữ liệu, ext4 sẽ ghi chép các thay đổi này vào 1 nhật ký trước. Sau đó ghi vào bộ nhớ đệm tạm thời trong RAM. Khi hệ thống ổn định, ext4 sẽ ghi dữ liệu từ bộ nhớ đệm vào 1 hệ thống tệp trên ổ cứng.
+      - Khôi phục hệ thống tệp: Trong trường hợp xảy ra sự cố hệ thống, Ext4 sẽ sử dụng nhật ký để khôi phục lại hệ thống tệp về trạng thái nhất quán trước khi xảy ra sự cố.
+    - Phân bố trễ trong Ext4: Đầu tiên là quá trình ghi dữ liệu - dữ liệu ban đầu sẽ được ghi vào bộ nhớ đệm. Thay vì phân bổ khối luôn thì ext4 sẽ tạo ra 1 bảng mô tả tạm thời( bảng này chứa thông tin về vị trí của đoạn dữ liệu đó và cho biết đoạn dữ liệu đó đang được lưu ở bộ nhớ đệm). Sau đó là việc hoãn phân bổ khối cho đến khi bộ nhớ đệm bị đầy hoặc là hệ thống cần ghi dữ liệu vào từ bộ nhớ đệm và ổ cứng. Lúc này nó sẽ chọn ra các khối chưa được sử dụng để sử dụng cho việc ghi dữ liệu vào ổ dựa trên thuật toán tối ưu hóa nhằm giảm phân mảnh ổ cứng( phân mảnh ổ cứng tức là dữ liệu không được lưu trữ 1 cách liền mạch trên các khối trong ổ, mà nó lưu 1 cách rải rác). Sau khi ghi dữ liệu vào khối đã chọn, ext4 sẽ cập nhật bản mô tả tạm thời để cho biết chính xác vị trí mới của dữ liueej trên ổ cứng.
+#### Partition
+- Partition là phân vùng. Là việc chia ổ đĩa thành nhiều phân vùng khác nhau để đảm nhiệm các vai trò khác nhau, chẳng hạn như phân vùng dành cho HĐH, hệ thống, phân vùng dành cho dữ liệu cá nhân. Có 3 loại phân vùng( phân vùng chính, phân vùng mở rộng, phân vùng logic):
+  - Phân vùng chính: Tối đa 4 pv chính trên 1 ổ MBR. Có chức năng lưu trữ HĐH, ứng dụng, dữ liệu, ...
+  - Phân vùng mở rộng: Tối đa 1 pv trên 1 ổ MBR. Chức năng chứa các phân vùng logic và không thể lưu trữ dữ liệu trực tiếp.
+  - Phân vùng logic: Nằm trong phân vùng mở rộng, được tạo thoải mái và lưu trữ dữ liệu giống như phân vùng chính. Yêu cầu bắt buộc là phải nằm trong phân vùng mở rộng.
+- Mục đích của việc sử dụng Partition là cải thiện hiệu suất đọc ghi, nâng cao khả năng quản lý dữ liệu , tối ưu hóa việc sử dụng dung lượng ổ 1 cách tối ưu nhất. Với mỗi 1 partition ta có thể sử dụng 1 FS riêng để phù hợp với mục đích sử dụng. Có thể hiểu rằng những dữ liệu quan trọng hoặc những dữ liệu cần được đảm bảo an toàn sẽ được sử dụng 1 FS có khả năng an toàn cao. Các loại dữ liệu sẽ được chia ra các phân vùng để dễ dàng quản lý và khi xảy ra sự cố tại phân vùng nào thì cso thể dễ dàng kiểm tra và xử lý.
+#### Các lệnh được sử dụng trong việc quản lý FS và Partition.
+- Lệnh Fdisk: Được sử dụng để tạo phân vùng trên ổ đĩa
+- Lệnh lsblk: Sử dụng để hiển thị các phân vùng cùng với mount thư mục nào. Sử dụng thêm tùy chọn -f để xem các phân vùng sử dụng FS nào. Thường được dùng trước khi tạo phân vùng.
+  - Cú pháp:
+    ```
+    sudo fdisk /dev/sda   -> Sau khi sử dụng lsblk để xem các pv được tạo trên ổ
+    ```
+  - Các option được sử dụng:
+    - `m`: hiển thị các option có thể chọn
+    - `p`: in ra bảng phân vùng
+    - `d`: xóa 1 phân vùng
+    - `n`: thêm 1 phân vùng mới
+    - `w`: lưu sau khi hoàn tất
+    - `q`: thoát khỏi fdisk
+ - Lệnh mkfs: Được sử dụng để tạo FS sau khi tạo phân vùng
+   - Cú pháp:
+     ```
+     mkfs -t [FS] -L [Label_name] /dev/sda1
+     ```
+   - Option:
+     - `-t`: type fs được sử dụng
+     - `L [name]`: gắn nhãn [name]
+     - `-f`: Bỏ qua bất kỳ lỗi nào xảy ra trong quá trình tạo FS
+ - Lệnh Mount và Umount: Sử dụng để gán 1 pv vào 1 thư mục được chỉ định.
+   - Cú pháp:
+     ```
+     mount -t [FS] /dev/sda1 [path_to_folder]
+     ```
+   - Mục đích sử dụng: Dễ dàng truy cập, sử dụng. Thực hiện các thao tác 1 cách dễ dàng và nhanh chóng. Có khả năng gắn kết các phân vùng vào thư mục với các kiểu định dạng FS khác nhau để phù hợp với mục đích sử dụng.
+   - Umount: Sử dụng để bảo vệ dữ liệu, giải phóng thiết bị lưu trữ, giải quyết sự cố khi gặp lỗi
+   - Cú pháp: `umount /dev/sda1`
+- Lệnh fsck: Được sử dụng để sửa lỗi FS
+  - Cú pháp:
+    ```
+    fsck -t [FS] /dev/sda1
+    ```
+  - Ví dụ: ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/ba6eeaf2-6ca8-43ed-91f3-e997ef806f2a)
+    - Các thông số được hiển thị bao gồm: Số file/Tổng số file, Số lượng block/Tổng số blocks:
+    - Tác dụng của Fsck là:
+      - Kiểm tra tính nhất quán của tệp: Fsck sẽ quét hệ thống tệp để xác định và sửa chữa các lỗi logic nếu thấy có lỗi về inode hoặc bản ghi metadata bị sai thì nó sẽ fix trực tiếp.
+      - Sửa chữa lỗi hệ thống của tệp: Dựa vào các lỗi phát hiện được thì fsck hoàn toàn có thể sửa chữa được các lỗi hệ thống tệp phổ biến. Đối với các loại lỗi nghiêm trọng thì fsck sẽ đề xuất cho các user sữa chữa thủ công or là sao lưu dữ liệu trước khi sửa chữa.
+      - Phục hồi dữ liệu: Tùy thuộc vào mức độ nghiêm trọng của lỗi và mức độ hỏng của hệ thống tệp, khả năng khôi phục dữ liệ của fsck được sử dụng trong 1 số trường hợp.
+      - Sử dụng thường xuyên để kiểm tra và sữa chữa hệ thống tệp. Đặc biệt là sau khi xảy ra các sự cố đột ngột như cúp điện, ... Trước khi định dạng hệ thống tệp cũng nên sử dụng fsck để kiểm tra và sửa lỗi.
+- Lệnh df và du sử dụng để xem dung lượng file, block, inode được sử dụng
+  - Lệnh df: sử dụng để hiển thị tổng quan về dung lượng của toàn bộ hệ thống(mặc định hiển thị dưới dạng block)
+    
+    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/4170783e-bfef-41f1-b5b0-78f2c20426cb)
+    - Cú pháp:
+      ```
+      df
+      ```
+    - Các option được sử dụng:
+      - `-a`: Hiển thị tất cả bao gồm file ẩn
+      - `-h`: Hiển thị dưới dạng dễ đọc(KB, MB)
+      - `-i`: Hiển thị dưới dạng inode
+      - `-t[fs]`: hiển thị thông tin về pv sử dụng vd: `df -t ext4`
+      - `-T`: thêm thông tin về fs sử dụng
+    - Thông tin về block và inode:
+      - Block: là 1 đơn vị lưu trữ dữ liệu trên ổ. Kích thước thông thường là 4Kb, 8Kb, 16Kb. Kích thước càng lớn tốc độ càng nhanh nhưng ảnh hưởng đến việc tối ưu hóa dung lượng. 1 file có thể chứa nhiều blocks. Việc sử dụng block cho 1 file phụ thuộc vào kích thuớc của file.
+      - Inode: là 1 dạng cấu trúc dữ liệu lưu trữ thông tin về metadata bao gồm: quyền, kích thước, số lượng blocks, đường dẫn đến các dữ liệu của file, ...
+  - Lệnh du: Sử dụng để hiển thị chi tiết dung lượng từng file, thư mục tại vị trí sử dụng.
+ ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/6348ade8-03c7-42e1-8922-3d465ec8dc60)
+
+    - Cú pháp:
+      ```
+      du
+      ```
+    - Các option được sử dụng:
+      - `-a`: Hiển thị tất cả bao gồm file ẩn
+      - `-h`: Hiển thi dưới dạng dễ đọc(KB, MB)
 ### RAID và các vấn đề liên quan
 - Các khái niệm về RAID:
 - Các lệnh và phần mềm mdadm để quản lý RAID mềm
