@@ -329,6 +329,9 @@
       + Với Time: Nhấn `T` để sắp xếp theo thời gian sử dụng tiến trình
     - Các tham số có trong lệnh top:
       + Dòng 1:
+
+         ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/0fc0271e-d3f0-488d-b5ab-4e676829d1e8)
+
         - Hiển thị về thời gian hiện tại - Thời gian đã sử dụngg.
         - Số lượng user sử dụng
         - Load Average: Tải trung bình là 1 tham số cần chú ý. Là số lượng tiến trình cần tài nguyên tính tóa từ CPU trong khoảng thời gian(5p, 10p, 15p). Lượng tiến trình cần duy trì trong khoảng từ 0 đến số lượng CPU có thể có, tức là nếu CPU có 6 core thì lượng tiến trình ở mức cho phép là 1-6 tiến trình. Nếu vượt quá thì sẽ có 1 số vấn đề xảy ra:
@@ -343,12 +346,18 @@
           - Tiến trình đi vào CPU để xử lý. CPU sẽ truy cập vào disk để lấy thông tin các rows. Tại thời điểm này CPU sẽ Idle và chờ disk phản hồi, đây chính là thời điểm waiting on disk.
         - Tổng quát lại : nếu phần trăm I/O wait lớn (1/số lượng cpu) * 100% thì đây là lúc bạn cần phải xem xét lại disk I/O hệ thống của mình. High I/O wait phụ thuộc vào số lượng CPU server đang có. 50% iowait của server 2 cpu chỉ tương đương với 12.5% iowait trên server có 8 cpu. Tỉ lệ nghịch với số lượng cpu của server. Số lượng CPU càng cao thì iowait càng thấp.
       + Dòng 2:
+     
+        ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/dee05ee7-e72a-4fe7-8e29-4e2c07c3d330)
+
         - Tổng số lượng tiến trình
         - Số tiến trình đang chạy
         - Số tiến trình trong trạng thái nghỉ ngơi
         - Số tiến trình bị dừng
         - Số tiến trình đã hoàn thành công việc nhưng chưa được tiến trình mẹ xóa nó khỏi bảng tiến trình.
       + Dòng 3:
+
+        ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/91808b1a-175c-493e-a741-d06d06a6cd3b)
+
         - %CPU do User sử dụng
         - %CPU do hệ thống sử dụng
         - Giá trị chuẩn - Biểu thức mức độ ưu tiên: Các tiến trình có giá trị càng chuẩn mức độ ưu tiên càng thấp.
@@ -358,16 +367,25 @@
         - Tiến trinh phục vụ ngắt phần mềm: Là các tiến trình cần chờ đợi các thành phần khác như hardware, software để tiếp tục thực thi tiến trình.
         - Các tiến trình phục vụ các tác vụ ngắt của máy ảo khác trong môi trường ảo.
       + Dòng 4:
+     
+        ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/c4212cb9-a8b4-421a-a7b9-766d9f37c651)
+
         - Tổng dung lượng Mem có
         - Số Mem chưa được sử dụng
         - Số Mem đã đang được sử dụng
         - Bộ nhớ đệm và được đệm và lưu vào bộ nhớ đệm
       + Dòng 5:
+     
+        ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/d772fae9-6d8f-4944-a546-c8f7535b6a90)
+
         - Tổng dung lượng hoán đổi
         - Số dung lượng đổi chưa được sử dụng
         - Số dung lượng hoán đổi đã sử dụng
         - Số lượng Mem có sẵn.
       + Dòng 6:
+     
+        ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/bec5826d-d2a4-4cb2-b338-269425e8ef5b)
+
         - PID: ID của tiến trình
         - USER: Tên của user sử dujg tiến trình
         - PR: Là mức độ ưu tiên của tiến trình. Tính toán dựa trên nice value và các yếu tố khác. Thay đổi theo thời gian, giá trị từ 0 -> 39( 0 là ưu tiên cao nhất).
@@ -381,6 +399,9 @@
           - Z - Zombie( Các tiens tình con bị kết thúc có CTDL chưa được xóa khỏi bảng tiến trình).
    - Lệnh htop: Là 1 lệnh được sử dụng để giám sát tiến trình, hiển thị các thông số về cpu, ram, loadavg, ... tương tự như top nhưng được hiển thị bằng các mầu sắc 1 cách trực quan hơn.
      - Trong htop có thể sử dụng phím F1 để xme các hướng dẫn cụ thể hơn
+ 
+       ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/afbf9e4f-d2c0-4c5b-afcc-b9dc604d907a)
+
      - Các màu sắc được biểu thị trong htop:
        - Với CPU:
          - Xanh lam: Các tiến trình với độ ưu tiên thấp
@@ -427,7 +448,8 @@
 - Binary Package là 1 dạng package. Nó được biên dịch sẵn mà không cần tới mã nguồn khi muốn cài đặt phần mềm, là những tệp dạng `*.deb`
   vd: `cd /var/cache/apt/archives` -> Nơi lưu trữ file `*.deb` do người dùng tải về.
 - Repo là nơi lưu trữ thông tin về vị trí của package, khi cài đặt phần mềm nó sẽ trỏ đến các vị trí đó.
-  vd: `cat /etc/apt/sources.list` -> mỗi dòng đại diện cho 1 kho lưu trữ phần mềm bao gồm các thông tin: ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/106e2fab-4194-424c-971c-726971a27878)
+  vd: `cat /etc/apt/sources.list` -> mỗi dòng đại diện cho 1 kho lưu trữ phần mềm bao gồm các thông tin:
+  ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/106e2fab-4194-424c-971c-726971a27878)
   - Loại kho lưu trữ: ppa, deb
   - Vị trí của kho lưu trữ: URL
   - Tên Repo: jammy,...
@@ -541,7 +563,9 @@
     ```
     fsck -t [FS] /dev/sda1
     ```
-  - Ví dụ: ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/ba6eeaf2-6ca8-43ed-91f3-e997ef806f2a)
+  - Ví dụ:
+
+     ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/ba6eeaf2-6ca8-43ed-91f3-e997ef806f2a)
     - Các thông số được hiển thị bao gồm: Số file/Tổng số file, Số lượng block/Tổng số blocks:
     - Tác dụng của Fsck là:
       - Kiểm tra tính nhất quán của tệp: Fsck sẽ quét hệ thống tệp để xác định và sửa chữa các lỗi logic nếu thấy có lỗi về inode hoặc bản ghi metadata bị sai thì nó sẽ fix trực tiếp.
