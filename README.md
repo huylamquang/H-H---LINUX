@@ -410,10 +410,80 @@
        - ps x: hiển thị các tiến trình hiện có
        - ps aux: Hiển thị tất cả các tiến trình đang chạy với những thông in chi tiết:
          - User: User sử dụng tiến trình
-         - 
+         - Pid: ID của tiến trình
+         - %Mem: % Mem mà tiến trình sử dụng
+         - %CPU: % CPU mà tiến trình sử dụng
+         - VSZ: Kích thước ảo của tiến trình(byte)
+         - RSS: Kích thước bộ nhớ thực mà tiến trình sử dụng(byte)
+         - TTY: "?" thể hiện việc không có 1 thiết bị đầu cuối nào điều khiển
+         - STAT: R - Running  ; S - Sleeping ; D - Ngủ kh gián đoạn ; T - Đã dừng lại ; Z - tiến trình k tồn tại or hoặc là zombie ; “<” - tiến trình có mức độ ưu tiên cao ; N - Tiến trình có mức độ ưu tiên thấp ; I - Trạng thái nhàn rỗi.
+         - START: Thời gian bắt đầu chạy
+         - TIME: Thời gian đã chạy
+         - COMMAND: Lệnh sử dụng
 ### Phần mềm và các vấn đề liên quan đến phần mềm
-- Các khái niệm cơ bản liên quan đến phần mềm
-- Các trình quản lý phần mềm 
+- Package là 1 dạng tệp tin chứa các thành phần để cài đặt 1 phần mềm: Tệp thực thi, tệp cấu hình, tệp thư viện, tệp hướng dẫn.
+- Depend là sự phụ thuộc của 1 phần mềm đang được cài đặt vào 1 phần mềm khác.
+  vd: `sudo apt-cache depends firefox`
+- Binary Package là 1 dạng package. Nó được biên dịch sẵn mà không cần tới mã nguồn khi muốn cài đặt phần mềm, là những tệp dạng `*.deb`
+  vd: `cd /var/cache/apt/archives` -> Nơi lưu trữ file `*.deb` do người dùng tải về.
+- Repo là nơi lưu trữ thông tin về vị trí của package, khi cài đặt phần mềm nó sẽ trỏ đến các vị trí đó.
+  vd: `cat /etc/apt/sources.list` -> mỗi dòng đại diện cho 1 kho lưu trữ phần mềm bao gồm các thông tin: ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/106e2fab-4194-424c-971c-726971a27878)
+  - Loại kho lưu trữ: ppa, deb
+  - Vị trí của kho lưu trữ: URL
+  - Tên Repo: jammy,...
+  - Vesion Repo: multiverse
+- Tùy thuộc vào bản HĐH được phân phối thì sẽ có những cách cài đặt phần mềm riêng:
+  - Sử dụng APT: `sudo apt install [name_pm]`
+  - Sử dụng từ tệp `*.deb`: `dpkg -i *.deb` (download các file .deb về).
+  - Cài đặt từ mã nguồn:
+    - B1: Tải xuống mã nguồn của phần mềm cần tải
+    - B2: Giải nén mã nguồn
+    - B3: Cài đặt các phụ thuộc mà phần mềm đó cần để có thể hoạt động được.
+- Các trình quản lý package của Debian(dpkg, apt)
+  - dpkg: Trình quản lý phần mềm được sử dụng để cài đặt, gỡ bỏ phần mềm
+  - Cách sử dụng:
+    - `dpkg -l`: Liệt kê danh sách phần mềm đã cài đặt
+    - `dpkg -i [*.deb]`: Cài đặt phần mềm với tệp *.deb
+    - `dpkg -r [*.deb]`: Gỡ bỏ phần mềm với tệp *.deb
+    - `dpkg -s firefox`: Kiểm tra gói tin đã được cài đặt. Hiển thị về thông tin phần mềm firefox đã được cài đặt.
+  - apt: Trình quản lý package nâng cao hơn so với dpkg, sử dụng để cài đặt, gỡ bỏ phần mềm.
+  - Cách sử dụng:
+    - `sudo apt install [name]`: cài đặt 1 phần mềm với tên của nó
+    - `sudo apt remove [name]` : gỡ bỏ 1 phần mềm với tên của nó
+    - `sudo apt list --installed | grep [name_sw]`: đưa ra danh sách phần mềm đã cài đặt và tìm 1 phần mềm đã cài đặt cụ thể.
+  - Sự khác biệt giữa `apt update và apt upgrade`:
+    - `apt update`: Cập nhật danh sách các package mới từ repo, sử dụng danh sách mới này để cài đặt phần mềm. Lưu ý, dùng thường xuyên và trước khi cài đặt phần mềm vì sẽ sử dụng danh sách các package mới.
+    - `apt upgrade`: Nâng cấp các package lên phiên bản mới nhất và được sử dụng trước khi cài đặt 1 phần mềm để sử dụng package với phiên bản mới nhất.
+### StartUp Scripts và các cách để chạy scripts mỗi khi mà server khởi động lại
+- Sử dụng StartUp Scripts: Tự động hóa các tác vụ sau khi hệ thống khởi động
+  - Sử dụng Systemd:
+    - B1: Viết Scripts
+      ```
+      #!/bin/bash
+      #Cập nhật kho lưu trữ và cài đặt Nginx:
+      sudo apt update && sudo apt install nginx
+      #Khởi động dịch vụ Nginx:
+      sudo systemctl start nginx
+      #Kích hoạt dịch vụ Nginx để tự động khởi động khi khởi động máy chủ:
+      sudo systemctl enable nginx
+      ```
+    - B2: Lưu Scripts vào 1 file với tên gọi `install-nginx.sh` ở thư mục `/etc/systemd/system/` và cấp quyền `sudo chmod +x /etc/systemd/system/install-nginx.sh`
+    - B3: Tạo tệp đơn vị systemd:
+      - **[Unit]**
+      `Description=Install and configure Nginx web server After=network.target`   -> #đảm bảo script được thực thi sau khi dv mạng khởi động
+      - **[Service]**
+      `Type=oneshot` -> #Script này chỉ được chạy 1 lần sau khi khởi động `ExecStart=/etc/systemd/system/install-nginx.sh`  -> #xác định vị trí của scripts
+      - **[Install]**
+      `WantedBy=multi-user.target` -> #đảm bảo scripts vẫn được kích hoạt khi hệ thống khởi động ở chế độ đa người dùng.
+      - Sau đó, Lưu tệp này với tên gọi `nstall-nginx.service` vào thư mục `/etc/systemd/system/`
+    - B4: Kích hoạt Script: `sudo systemctl enable install-nginx.service`
+  - Sử dụng Cron:
+    - @reboot /path/to/your/script.sh -> chạy 1 script ở 1 đường dẫn cụ thể sau khi hệ thống khởi động.
+  - Sử dụng tệp cấu hình khởi động: rc.local
+    - B1: tạo 1 script và lưu vào `/home/huylq/myscript.sh`
+    - B2: Cấp quyên thực thi cho nó: `sudo chmod +x /home/huylq/myscript.sh`
+    - B3: mở tệp /etc/rc.local sau đó thêm dòng chứa đường dẫn của tệp script vào cuối: `/home/huylq/myscript.sh`.
+    - B4: Khởi động lại máy chủ: `sudo reboot`
 ### FS, Partition, Mount và các vấn đề liên quan
 - Các khái niệm về FS Partition và Mount
 - Các lệnh được sử dụng và chức năng cách sử dụng chúng
