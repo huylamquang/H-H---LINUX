@@ -599,6 +599,126 @@
     - Các option được sử dụng:
       - `-a`: Hiển thị tất cả bao gồm file ẩn
       - `-h`: Hiển thi dưới dạng dễ đọc(KB, MB)
+### Cấu trúc về 1 FS và các thư mục cùng chức năng của từng thư mục
+- Cấu trúc về 1 FS và chức năng của từng thư mục:
+  - `/`: Thư mục root chứa tất cả thông tin và người dùng root mới có quyền ghi ở trong thư mục này.
+  - `/bin`: Thư mục chứa các lệnh thực thi của hệ thống. Hoạt động để có thể sử dụng các lệnh thường dùng trong Terminal: ls, ll, top, ... - Chứa các file thông tin về các lệnh tail, tac, cat, sort, ...
+  - `/dev`: Thư mục chứa các thông tin về các thiết bị sử dụng. Hoạt động như 1 giao diện thiết bị. Là nơi đại diện cho các thiết bị.
+  - `/etc`: Thư mục chứa các tệp tin cấu hình của HĐH. Chứa các thông tin về file cấu hình log, phần cứng, phần mềm, mạng, các dịch vụ có thể được sử dụng, ... vd: logrotate.d, resolv.conf, fstab, ...
+  - `/boot`: Thư mục liên quan đến việc khởi động hệ thống. Chứa những thông tin về quá trình khởi động hệ thống, các tệp tin khởi động, ...
+  - `/proc`: Thư mục chứa các thông tin về các tiến trình đang được sử dụng(ID của tiến trình) và các file liên quan đến tiến trình(uptime, version, loadavg).
+  - `/lib`: Là thư viện phục vụ cho hoạt động của kernel và việc cài đặt phần mềm. Các công việc cơ bản được tải tự động từ kernel.
+  - `/opt`: Optical là thư mục dành cho các phần mềm không có sẵn trên hệ thống được cài đặt từ người dùng.
+  - `/sbin`: Thư mục chứa các lệnh thực thi, nếu các lệnh thực thi không có trong bin thì nó sẽ xuất hiện và được lưu trữ tại đây. Thư mục này có quyền cao hơn thư mục `/bin` và là nơi lưu trữ các chương trình quản trị hệ thống. Được sử dụng bởi admin để quản trị hệ thống.
+  - `/usr`: Thư mục chứa các file binary, libary, tài liệu, source-code cho các chương trình. Gồm các file binary cho `/bin`, `/sbin` chứa các file thư viện cho `/lib`.
+  - `/var`: Thư mục biến đổi. Là thư mục chứa những gì có thể biến đổi trong hệ điều hành đều được lưu trữ ở đây. Bao gồm các file log nhật ký về hệ thống, phần cứng, phần mềm, khởi động, .. của HĐH.
+  - `/sys`: Thư mục chứa các thông tin về hệ thống ảo: Phần cứng, phần mềm, ... . Cung cấp giao diện để truy cập và quản lý các thiết bị và hệ thống con của kernel Linux.
+  - `/snapd`: Thư mục chứa các thành phần của hệ thống quản lý gói Snap. Snap là 1 cách đóng gói phần mềm mới trong linux, cho phép cài đặt và gỡ bỏ cài đặt phần mềm dễ dàng hơn.
+  - `/mnt`: Thư mục chứa các thư mục được mount và những gì liên quan đến mount.
+  - `/run`: Chứa các tệp và thư mục đang chạy với các processes. sẽ được xóa khi hệ thống reboot.
+  - `/srv`: Thư mục chứa dữ liệu phục vụ cho các dịch vụ mạng.
+  - `/tmp`: Thư mục tạm thời để lưu trữ những tệp tạm thời của hệ thống.
+  - `/root`: Thư mục của root(dành riêng cho quản trị hệ thống)
+  - `/lost + found`: Là 1 thư mục được sử dụng để khôi phục hệ thống tệp ext2,3,4. Nếu 1 tệp nằm trên hệ thống thông tin này không được đóng đúng cách và xảy ra lỗi phần mềm, sự cố hệ thống thì tệp đó sẽ được lưu trong thư lục `lost + found`.
+### Các lệnh được sử dụng để tìm kiếm file: which, whereis, locate, find và các lệnh sử dụng để quản lý file: ls, ll, rm, cp, mv, touch, ln
+#### Các lệnh được sử dụng để tìm kiếm file
+  - Lệnh which: Lệnh sử dụng để tìm kiếm đường dẫn đến 1 thư mục, file
+    - Cú pháp:
+      ```
+      which [command]
+      ```
+    - Ví dụ:
+   
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/a7876b0b-fe21-41fe-82c6-cf261e04cc3a)
+
+      ```
+      which ls
+      which ln
+      which ll
+      ```
+  - Lệnh Whereis: Tượng tư như which nhưng có thêm đường dẫn đến thư mục man của lệnh đó
+    - Cú pháp:
+      ```
+      whereis [command]
+      ```
+    - Ví dụ:
+   
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/e9833923-38e9-41f0-b3a4-b2b34eb0bf30)
+
+      ```
+      whereis ls
+      whereis cat
+      whereis cut
+      ```
+  - Lệnh locate: Lệnh tìm kiếm, thường được sử dụng cùng grep. Lệnh này tìm kiếm được dựa trên csdl có sẵn vì vậy trước khi tìm kiếm nên sử dụng lênh `updatedb` để có thể làm mới CSDL để có thể tìm kiếm dễ dàng và chính xác hơn. Sử dụng CSDL mlocate được tạo và cập nhật định kỳ để tìm kiếm file và thư mục.
+    - Cú pháp:
+      ```
+      locate [pattern]
+      ```
+    - Các option được sử dụng:
+      - `-count`: Đếm số lượng được tìm thấy
+      - `-r`: Tìm kiếm đệ quy trong thư mục
+      - `-k`: Hiển thị thêm thông tin về file được tìm thấy
+      - `-i`: Bỏ qua phân biệt chữ hoa chữ thường
+    - Ví dụ:
+   
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/21e34780-34db-426d-9e0c-3e100f9b8e51)
+
+      ```
+      locate zip | grep bin -> tìm kiếm các file nén với mẫu tìm kiếm "bin"
+      ```
+ - Lệnh Find: Lệnh tìm kiếm file hoặc thư mục trực tiếp trong hệ thống tệp tin. Có thể sử dụng được nhiều tiêu chí khác nhau để tìm kiếm bao gồm:
+   - `-name`: Tìm kiếm theo tê
+   - `-type f or d`: tìm kiếm theo file or directory
+   - `-size +N`: tìm kiếm theo size
+   - `-mtime +N`: tìm kiếm file dựa theo sửa đổi cách đây N ngày
+   - `-atime +N`: tìm kiếm file dựa theo truy cập cách đây N ngày
+   - `-perm  777`: Tìm kiếm file dựa trên phân quyền.
+   - Cú pháp:
+     ```
+     find [location] [option] [pattern]
+     ```
+   - Ví dụ:
+
+     ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/14e19e28-5464-481b-839e-6638b8aaa1c5)
+     ```
+     find /home/huylq -name file3
+     find / -perm 777
+     ```
+#### Các lệnh sử dụng để quản lý file và link
+- Lệnh ls: Là lệnh sử dụng để xem thông tin các file và thư mục có trong thư mục đang làm việc
+  - Cú pháp:
+  ```
+  ls [option]
+  ```
+  - Các option được sử dụng:
+    -  `-l`: Hiển thị chi tiết về file, thư mục(quyền, chủ sỡ hữu user, gr, thời gian tạo file, sửa đổi file, kích thước file ở dạng dễ đọc, tên của từng file dir, ...).
+    -  `-a`: Hiển thị tất cả các file và thư mục gồm cả file ẩn
+    - Ví dụ:
+
+![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/44f0ab48-ab98-4382-9ef7-60d7428341c1)
+  ```
+      ls -l
+      ls -a
+      ls -al
+  ```
+- Lệnh touch: Tạo file đơn giản
+  - Cú pháp:
+    ```
+    touch [name_file]
+    ```
+- Lệnh cp: Lệnh copy nd của 1 file vào thư mục hoặc của 1 thư mục vào 1 thư mục.
+  - Cú pháp:
+    ```
+    cp [option] [path_source] [path_destiion]
+    ```
+  - Các option đươc sử dụng là:
+    - `-r`: sao chép đệ quy tất cả các file và thư mục con trong 1 thư mục sang 1 thư mục đích
+    - `-p`: sao chép giữ lại tất cả bao gồm quyền truy cập, chủ sỡ hữu user, gr, thời gian sửa đỏi,...
+    - `-v`: Hiển thị thông tin chi tiết về quá trình sao chép
+  - Ví dụ:
+    ```
+    ```
 ### RAID và các vấn đề liên quan
 - Các khái niệm về RAID:
 - Các lệnh và phần mềm mdadm để quản lý RAID mềm
