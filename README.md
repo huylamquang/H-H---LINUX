@@ -751,6 +751,24 @@
     rm -vr DATA2
     rm -rvf DATA3
     ```
+- Lệnh ln: Lệnh đực sử dụng để gắn syslink vào thư mục or file
+  - Liên kết cứng(hard link): Tạo ra 1 biệt danh cho tập tin đã tồn tại. Nó trỏ trực tiếp đến inode( chứa thông tin về dữ liệu tập tin) của tập tin gốc, chia sẻ chung dữ liệu với tập tin gốc. Thay đổi nội dung của 1 tệp được liên kết cứng sẽ ảnh hưởng đến tất cả tệp khác được liên kết cùng dữ liệu.
+  - Liên kết mềm( Symbolic link): Giống như một phím tắt trỏ đến 1 tập tin hoặc thư mục khác. Nó lưu trữ đường dẫn đến tập tin gốc, không chia sẻ dữ liệu với tập tin gốc. Thay đổi vị trí or tên của tệp nguồn sẽ ảnh hướng đến liên kết mềm.
+  - Cú pháp:
+    ```
+    ln [option] [source] [destination]
+    ```
+  - Các option được sử dụng:
+    - `-s`: Tạo liên kết mềm( mặc định là LK cứng)
+    - `-f`: Buộc tạo liên kết ngay cả khi tệp đích đã tồn tại
+    - `-v`: In thông tin chi tiết về các liên kết được tạo ra.
+    - `-r`: Tạo liên kết đệ quy cho thư mục, bao gồm tất cả tệp và thư mục con bên trong.
+  - Ví dụ:
+    ```
+    ln file1 file2
+    ln -s /home/huylq/DATA1 /home/huylq/Documents
+    ```
+    
 ### RAID và các vấn đề liên quan
 - Các khái niệm về RAID:
 - Các lệnh và phần mềm mdadm để quản lý RAID mềm
