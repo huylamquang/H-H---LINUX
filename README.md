@@ -879,7 +879,8 @@
 
   - Kiểm tra I/O: Các bước tiến hành:
     - B1: Tạo 1 file `sysbench fileio --file-total-size=5G --file-num=5 prepare` với tổng dung lượng là 5G và có 5 file được tạo ra. Ở đây chúng ta sẽ nhìn thấy tốc độ ghi:
-     ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/66a62f2b-dcf7-4a04-9e1a-7d6dc8b09dbd)
+     ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/0c784ec8-bbf2-482f-9ad3-78cd1e3b01aa)
+
 
     - B2: Ta kiểm tra tốc độ đọc bằng lệnh 'sysbench fileio --file-total-size=1G --file-num=1 --file-block-size=16M --file-test-mode=seqrd --time=300 run` với tổng dung lượng của file sử dụng để kiểm tra là 1Gb, số lượng tập tin được tạo và sử dụng trong bài kiểm tra là 1, Kích thước mỗi khối là 16M, Chế độ kiểm tra là đọc tuần tự (ngoài ra còn có chế độ `rndrd`: ngãu nhiên , ) với thời gian thực hiện 300s(5p).
       ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/4aa3db55-e534-46af-b0af-ee6bb9d8a325)
@@ -930,7 +931,9 @@
 
 
     - Ổ thường:
-      
+
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/6de46a4d-3c58-45fa-91a9-37db74b372a1)
+
       
 
 - So sánh RAID 1 với ổ thường
@@ -950,6 +953,9 @@
       ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/70fc31cc-a335-4145-846f-ed225c87dac9)
       
     - Ổ thường:
+ 
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/b5024d36-601e-41eb-92f5-b13b626177b8)
+
 
 
     ###### Kết luận
