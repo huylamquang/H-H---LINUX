@@ -160,7 +160,7 @@
     tac -n file1
     tac -s file1
     ```
-#### Các lệnh nâng cao thao tác với văn bản
+#### 2. Các lệnh nâng cao thao tác với văn bản
 - grep: Là lệnh được sử dụng để tìm kiếm chuỗi trong văn bản. Thường kết hợp với biểu thức chính quy để tìm kiếm sđt, ngày tháng năm, địa chỉ ip, ... có tỏng văn bản.
   - Cú pháp:
     ```
@@ -865,10 +865,87 @@
   - B1: `sudo apt update`
   - B2: `sudo apt install sysbench`
 - Các tính năng của `sysbench` để đánh giá hiệu suất
-  - Kiểm tra CPU
-  - Kiêm tra bộ nhớ
-  - Kiểm tra I/O:
-- Ứng dụng của `sysbench`
+  - Kiểm tra CPU:
+    - `sysbench --test=cpu run` hiển thị báo cáo hiệu suất tổng quan về cpu của hệ thống.
+      
+    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/ef29de5c-359a-46ce-ab8e-bd5cb4d96b35)
+    - Các thông số được thể hiện:
+      - `events per second: 1359.61`: Hiển thị tốc độ xử lý của CPU được đo bằng số sự kiên( phép toán tìm số nguyên tố) mà CPU thực hiện trong mỗi giây. 1359,61/1s
+      - `General statistics`:
+        - `total time: 10.0001s`: Tổng thời gian thực hiện bài kiểm tra, khoảng 10 giây
+        - `total number of events: 13598`: Tổng số sự kiện (phép toán tìm số nguyên tố) đã được thực hiện trong suốt bài kiểm tra. Giá trị này là 13598 sự kiện.
+      - Latency (ms): 
+        - `min: 0.73`: Độ trễ nhỏ nhất cho mỗi sự kiện là 0.73 mili giây.
+        - `avg: 0.74`: Độ trễ trung bình cho mỗi sự kiện là 0.74 mili giây. Đây là giá trị trung bình của thời gian xử lý mỗi sự kiện.
+        - `max: 1.10`: Độ trễ lớn nhất cho mỗi sự kiện là 1.10 mili giây.
+        - `95th percentile: 0.77`: 95% của các sự kiện có độ trễ nhỏ hơn hoặc bằng 0.77 mili giây. Đây là một giá trị thống kê cho thấy mức độ phân phối của độ trễ.
+        - `sum: 9997.09`: Tổng độ trễ của tất cả các sự kiện, tính bằng mili giây.
+      - Threads fairness:
+        - `events (avg/stddev): 13598.0000/0.00`: Giá trị trung bình và độ lệch chuẩn của số sự kiện mỗi luồng. Ở đây, giá trị trung bình là 13598 sự kiện mỗi luồng và độ lệch chuẩn là 0.00, cho thấy không có sự khác biệt giữa các luồng.
+        - `execution time (avg/stddev): 9.9971/0.00`: Giá trị trung bình và độ lệch chuẩn của thời gian thực hiện mỗi luồng. Ở đây, giá trị trung bình là 9.9971 giây mỗi luồng và độ lệch chuẩn là 0.00, cho thấy tất cả các luồng thực hiện bài kiểm tra với thời gian gần như bằng nhau.
+  - Kiêm tra bộ nhớ:
+    - `sysbench --test=memory run` Hiển thị các số liệu thống kê về lượng bộ nhớ còn trống và đang được sử dụng.
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/2039d102-d5c5-475e-96ae-4b54d2e35021)
+      - Các thông số được thể hiện:
+        - `Total operations: 73212396 (7320234.85 per second)`: Tổng số thao tác (operations) đã được thực hiện trong suốt bài kiểm tra là 73212396. Tốc độ thực hiện thao tác là 7320234.85 thao tác mỗi giây.
+        - `71496.48 MiB transferred (7148.67 MiB/sec)`: Tổng số dữ liệu đã được chuyển là 71496.48 MiB (MebiBytes). Tốc độ chuyển dữ liệu là 7148.67 MiB mỗi giây.
+        - Thống Kê Chung (General statistics):
+          - `total time: 10.0001s`: Tổng thời gian thực hiện bài kiểm tra là 10.0001 giây.
+          - `total number of events: 73212396`: Tổng số sự kiện (events) đã được thực hiện trong suốt bài kiểm tra là 73212396.
+        - Độ Trễ (Latency):
+          - `min: 0.00`: Độ trễ nhỏ nhất cho mỗi sự kiện là 0.00 mili giây.
+          - `avg: 0.00`: Độ trễ trung bình cho mỗi sự kiện là 0.00 mili giây.
+          - `max: 0.03`: Độ trễ lớn nhất cho mỗi sự kiện là 0.03 mili giây.
+          - `95th percentile: 0.00`: 95% của các sự kiện có độ trễ nhỏ hơn hoặc bằng 0.00 mili giây.
+          - sum: 4658.10: Tổng độ trễ của tất cả các sự kiện, tính bằng mili giây.
+        - Threads fairness:
+          - `events (avg/stddev): 73212396.0000/0.00`: Giá trị trung bình và độ lệch chuẩn của số sự kiện mỗi luồng. Ở đây, giá trị trung bình là 73212396 sự kiện mỗi luồng và độ lệch chuẩn là 0.00, cho thấy không có sự khác biệt giữa các luồng.
+          - `execution time (avg/stddev): 4.6581/0.00`: Giá trị trung bình và độ lệch chuẩn của thời gian thực hiện mỗi luồng. Ở đây, giá trị trung bình là 4.6581 giây mỗi luồng và độ lệch chuẩn là 0.00, cho thấy tất cả các luồng thực hiện bài kiểm tra với thời gian gần như bằng nhau.
+
+
+  - Kiểm tra I/O: Các bước tiến hành:
+    - B1: Tạo 1 file `sysbench fileio --file-total-size=5G --file-num=5 prepare` với tổng dung lượng là 5G và có 5 file được tạo ra. Ở đây chúng ta sẽ nhìn thấy tốc độ ghi:
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/f705da04-de42-4102-9cc5-3a1768925ab1)
+
+    - B2: Ta kiểm tra tốc độ đọc bằng lệnh 'sysbench fileio --file-total-size=1G --file-num=1 --file-block-size=16M --file-test-mode=seqrd --time=300 run` với tổng dung lượng của file sử dụng để kiểm tra là 1Gb, số lượng tập tin được tạo và sử dụng trong bài kiểm tra là 1, Kích thước mỗi khối là 16M, Chế độ kiểm tra là đọc tuần tự (ngoài ra còn có chế độ `rndrd`: ngãu nhiên , ) với thời gian thực hiện 300s(5p).
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/4aa3db55-e534-46af-b0af-ee6bb9d8a325)
+
+    - B3: Sau khi test xong , xóa 5GB đã tạo `sysbench --test=fileio --file-total-size=5G cleanup`
+- Ứng dụng của `sysbench`:
+  - Đánh giá hiệu suất: Kiểm tra và so sánh hiệu suất của các thành phần phần cứng và phần mềm trên máy tính or máy chủ
+  - Kiểm tra sức mạnh của hệ thống: Đo lường khả năng xử lý của hệ thống trong các tình huống tải cao
+  - Phát hiện nút thắt: Xác định các yếu tố giới hạn hiệu suất của hệ thống
+#### Thực hiện bài LAB dựa trên những lý thuyết tìm hiểu ở trên và có những kết luận như sau:
+- So sánh RAID 0 và RAID 1:
+  - Khả năng write:
+    - RAID 0:
+    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/dc5d9709-3df3-487d-839a-82ebd61f5537)
+
+    - RAID 1:
+  
+
+  - Khả năng read:
+    - RAID 0:
+    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/8a9748b7-38fd-4703-a1f8-5b2f047a4902)
+
+    - RAID 1:
+
+- So sánh RAID 0 với ổ thường:
+  - Khả năng write:
+    - RAID 0:
+    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/dc5d9709-3df3-487d-839a-82ebd61f5537)
+
+    - Ổ thường:
+  - Khả năng read:
+    - RAID 0:
+    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/4412a103-37ba-4eae-b1c8-f95876e0b4cc)
+
+    - Ổ thường:
+      
+
+- So sánh RAID 1 với ổ thường
+  - Khả năng write
+  - Khả năng read
 ### Log và Logrotate và các vấn đề liên quan
 
 ### Cấu hình IP tĩnh IP động 
