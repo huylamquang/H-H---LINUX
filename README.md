@@ -710,7 +710,7 @@
 - Lệnh cp: Lệnh copy nd của 1 file vào thư mục hoặc của 1 thư mục vào 1 thư mục.
   - Cú pháp:
     ```
-    cp [option] [path_source] [path_destiion]
+    cp [option] [path_source] [path_destination]
     ```
   - Các option đươc sử dụng là:
     - `-r`: sao chép đệ quy tất cả các file và thư mục con trong 1 thư mục sang 1 thư mục đích
@@ -718,6 +718,38 @@
     - `-v`: Hiển thị thông tin chi tiết về quá trình sao chép
   - Ví dụ:
     ```
+    cp -r DATA1 DATA2
+    cp -p file1 DATA1
+    cp -pv file1 DATA2
+    ```
+- Lệnh mv: Di chuyển file or thư mục đến nơi khác và có thể đổi tên.
+  - Cú pháp:
+    ```
+    mv [option] [path_source] [path_destination]
+    ```
+  - Các option được sử dụng là:
+    - `-f`: Buộc ghi đè lên tệp hoặc thư mục hiện có mà không cần xác nhận
+    - `-n`: Bỏ qua thao tác nếu tệp hoặc thư mục đã tồn tại
+    - `-v`: In thông tin chi tiết về quá trình di chuyển
+    - `-r`: Di chuyển thư mục đệ quy gồm cả file và thư mục con bên trong
+  - Ví dụ:
+    ```
+    mv -rf DATA1 DATA2
+    mv -vr file1 DATA1
+    ```
+- Lệnh rm: Lệnh được sử dụng để xóa file, thư mục trong thẩm quyền của nó khỏi thư mục đang làm việc
+  - Cú pháp:
+    ```
+    rm [option] [name_file]
+  - Các option được sử dụng:
+    - `-f`: buộc xóa tệp hoặc thư mục ngay mà không phải hỏi
+    - `-v`: hiển thị thông tin chi tiết các tệp bị xóa
+    - `-r`: xóa đệ quy, xóa toàn bộ file or thư mục con có trong thư mục cần xóa
+  - Ví dụ:
+    ```
+    rm -f DATA1
+    rm -vr DATA2
+    rm -rvf DATA3
     ```
 ### RAID và các vấn đề liên quan
 - Các khái niệm về RAID:
