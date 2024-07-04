@@ -770,8 +770,97 @@
     ```
     
 ### RAID và các vấn đề liên quan
-- Các khái niệm về RAID:
-- Các lệnh và phần mềm mdadm để quản lý RAID mềm
+- RAID: Là việc lưu trữ dữ liệu trên nhiều ổ với mục đích tăng hiệu suất đọc ghi, tối ưu hóa việc sử dụng dung lượng lưu trữ. Đặc biệt là cơ chế dự phòng.
+- Các loại RAID phổ biến:
+  - RAID 0: Được hình thành từ 2 ổ trở lên và lưu trữ đều trên 2 ổ
+    - VD: Với 8 đoạn dữ liệu 1 -> 8 thì RAID 0 sẽ lưu trữ các đoạn dữ liệu 1 cách xen kẽ trên 2 ổ, tức là các đoạn dữ liệu 1,3,5,7 sẽ được lưu tại ổ 1 và đoạn dữ liệu 2,4,6,8 sẽ được lưu tại ổ 2. Điều này giúp tận dụng tối đa sức mạnh của tất cả các ổ.
+    - Ưu điểm: Hiệu suất đọc ghi tốt, tận dụng được tối đa khả năng của 2 ổ.
+    - Nhược điểm: Khả năng về an toàn dữ liệu là chưa có bởi vì khi xảy ra sự cố trên 1 trong 2 ổ thì khả năng mất mát dữ liệu sẽ rất cao.
+    - Phù hợp: Vì những ưu nhược điểm trên nên RAID 0 chỉ phù hợp với các ứng dụng cụ thể như Livestream, Video trực tuyến, ...
+    - So sánh với ổ thường: RAID 0 đạt mức tốt trên các phương diện hiệu suất, tốc độ đọc ghi, ... Vấn đề tồn tại ở RAID 0 là về an toàn dữ liệu
+  - RAID 1: Được cấu thành từ ít nhất 2 ổ. Các đoạn dữ liệu đuọc lưu trữ song song trên cả 2 ổ
+    - VD: Có 4 đoạn dữ liệu. 4 đoạn dữ liệu này sẽ được lưu trữ song song trên cả 2 ổ. Tức là 1 ổ sẽ lưu trữ và 1 ổ sẽ backup lại dữ liệu từ ổ đã lưu trữ.
+    - Ưu điểm: Ngược lại với RAID 0 thì RAID 1 có độ an toàn về dữ liệu ở mức tốt khi mà dữ liệu được lưu trữ song song trên 2 ổ, trong trường hợp 1 ổ xảy ra sự cố thì vẫn còn ổ còn lại lưu trữ dữ liệu.
+    - Nhược điểm: Hiệu suất không cao. Khả năng ghi chậm hơn ổ thường vì phải ghi đồng thời lên 2 ổ riêng biệt.
+    - Phù hợp: Dựa vào ưu nhược điểm thì cho thấy RAID 1 phù hợp với các dịch vụ yêu cầu về an toàn dữ liệu.
+    - So sánh với ổ thường: Khả năng đọc ngang ngửa nhưng khả năng ghi chậm hơn nhiều vì phải ghi trên cả 2 ổ.
+  - RAID 5: Cần tối thiểu 3 ổ để cấu thành. Cả 3 ổ sẽ trực tiếp lưu trữ dữ liệu khác nhau cùng với đó là quá trình tính toán giá trị chẵn lẽ dựa trên dữ liệu cũng được thực hiện sau đó được lưu vào từng ổ để có khả năng backup cho dũ liệu từng ổ.
+    - VD: Có 6 đoạn dữ liệu 1,2,3,4,5,6 được sắp xếp ghi vào 3 ổ:
+      -  Ổ 1: Lưu đoạn dữ liệu 1,2 và giá trị chẵn lẻ của đoạn dữ liệu này sẽ được lưu vào ổ 2
+      -  Ổ 2: Lưu đoạn dữ liệu 3,4 và giá trị chẵn lẽ của đoạn dữ liệu này sẽ được lưu vào ổ 3
+      -  Ổ 3: Lưu đoạn dữ liệ 5,6 và giá trị chẵn lẽ của đoạn dữ liệu này sẽ được lưu vào ổ 1
+    - Tính chẵn lẻ: Các bước tính chẵn lẽ diễn ra như sau:
+      - B1: Dữ liệu được chia thành các block
+      - B2: Có 1 hàm toán học XOR được sử dụng để khi đưa các block(1 block thường 4KB - 512KB và tồn tai dưới dạng nhị phân) vào thì nó sẽ thực hiện tính toán. VD: `Dữ liệu ổ 1: 1110 0010` và `Dữ liệu ổ 2: 1000 1010` thì sau khi đưa vào hàm XOR sẽ cho ra đoạn dữ liệu sau `0110 1000` và được lưu vào ổ 3.
+    - Ưu điểm: Cải thiện được các nhược điểm có ở RAID 0 và RAID 1. Nâng cao hiệu suất, đảm bảo khả năng về an toàn dữ liệu.
+    - Nhược điểm: Dữ liệu chỉ đảm bảo khi có lỗi với 1 ổ nếu xảy ra lỗi trên 2 ổ đồng thời thì dữ liệu hoàn toàn có thể bị mất. Tải trọng cao cho bộ điều khiển RAID vì phải tính chẵn lẽ. Hiệu suất ghi khá chậm vì phải vừa tính chẵn lẽ vừa ghi dữ liệu.
+    - Phù hợp: Với các ứng dụng lưu trữ, chia sẻ dữ liệu. Phù hợp với Server tập tin, Server web, Cloud Storage, ...
+    - So sánh với ổ thường: Hiệu suất và dung lượng lưu trữ cao hơn so với sử dụng 1 ổ cứng duy nhất. Khả năng chịu lỗi tốt hơn, tiết kiệm chi phí khi so với sử dụng nhiều ổ riêng biệt có cùng dung lượng. Tuy nhiên việc triển khai RAID 5 khá khó khăn vì độ phức tạp. Khả năng mất mát dữ liệu vẫn có thể xảy ra nếu 2 ổ đồng thời bị lỗi.
+- RAID cứng và RAID mềm:
+  - RAID cứng là việc sử dụng bộ điều khiển chuyên dụng dể quản lý mảng RAID
+  - RAID mềm là sử dụng phần mềm trên HĐH để quản lý mảng RAID.
+  - Sự khác nhau giữa chúng dự trên: hiệu suất, độ tin cậy, chi phí, mức độ an toàn, khả năng mở rộng, khả năng tương thích.
+- Sử dụng RAID để tăng hiệu suất đọc ghi của hệ thống, bảo vệ dữ liệu, tăng dung lượng, tăng mức độ tin cậy khi sử dụng, ... các yếu tố đánh giá để phù hợp với mục đích sử dụng.
+- Phần mềm mdadm: giúp tạo, quản lý và giám sát RAID
+  - mdadm là 1 tiện ích dòng lệnh mạnh mẽ được sử dụng để quản lý các thiết bị RAID bao gồm việc tạo, cấu hình, giám sát, sữa chữa các mảng RAID.
+    - Tạo: Hỗ trợ nhiều cấp độ RAID 0 1 5 ...
+      - Cú pháp:
+        ```
+        sudo mdadm --create --verbose /dev/md[*] --level=[*] --raid-devices=[*]  [Device1] [Device2] ...
+        ```
+        - Với
+          - `--create`: Biểu thị cho `mdadm` thực hiện thao tác tạo mảng RAID
+          - `--verbose`: Hiển thị thông tin chi tiết về quá trình tạo RAID
+          - `/dev/md[*]`: Xác định tên của thiết bị cho mảng RAID.
+          - `--level=[*]`: Các loại RAID 0,1,5, ...
+          - `--raid-devices=[*]`: Số lượng thiết bị tham gia vào RAID
+          - `[Device1] [Device2]`: Danh sách các thiết bị tham gia vào RAID
+          - Ngoài ra còn có các option khác: `--chuck`, `--metadata`, `--spare-devices`, `--name`, ...
+    - Kiểm tra trạng thái sau RAID:
+      - Cú pháp:
+        ```
+        sudo mdadm --status /dev/md[*] 
+        ```
+        -> hiển thị tên mảng, mức độ RAID, trạng thái thiết bị, dung lượng sử dụng và khả dụng. 
+    - Giám sát:
+      - Cú pháp:
+        ```
+        sudo mdadm --detail /dev/md[*]
+        ```
+        -> hiển thị chi tiết về mảng RAID bao gồm cấu hình RAID, trạng thái thiết bị, thông tin partie, tốc độ truyền dữ liệu, ...
+       
+    - Kiểm ra lỗi và đánh dấu
+      - Cú pháp:
+        ```
+        sudo mdadm --check /dev/md[*]
+        ```
+        -> Lệnh này sẽ quét mảng RAID để tìm kiếm lỗi và sau đó hiển thị thông tin về lỗi mà nó phát hiện được.
+        ```
+        sudo mdadm --fail /dev/md[*] [Device*]
+        ```
+        -> Lệnh này đánh dấu 1 thiết bị trong mảng có lỗi
+    - Sửa chữa lỗi:
+      - Cú pháp:
+        ```
+        sudo mdadm --repair /dev/md[*]
+        ```
+        -> Sau khi kiểm tra lỗi sử dụng lệnh này để sửa lỗi, chỉ thể thế sửa 1 số lỗi trong vùn có thể sửa như: lỗi parite, sử dụng đĩa dự phòng khôi phục dữ liệu khi lỗi, ...
+    - Dừng mảng RAID và xóa 1 ổ khỏi mảng:
+      - Cú pháp:
+        ```
+        sudo mdadm --stop /dev/md[*]
+        ```
+        -> Dừng mảng RAID, không cho nó hoạt động nữa.
+        ```
+        sudo mdadm --assemble /dev/md[*]
+        ```
+        -> Khởi động lại mảng RAID sau khi STOP
+        ```
+        sudo mdadm --remove /dev/md[*] [Device*]
+        ```
+        -> Xóa 1 thiết bị khỏi mảng RAID
+      
+      
 ### Log và Logrotate và các vấn đề liên quan
 ### Cấu hình IP tĩnh IP động 
 ### Cron, at và các công cụ tự đông hóa
