@@ -816,35 +816,9 @@
       -  `--raid-devices=[*]`: Số lượng thiết bị tham gia vào RAID
       - `[Device1] [Device2]`: Danh sách các thiết bị tham gia vào RAID
       - Ngoài ra còn có các option khác: `--chuck`, `--metadata`, `--spare-devices`, `--name`, ...
-    - Kiểm tra trạng thái sau RAID:
-      - Cú pháp:
-        ```
-        sudo mdadm --status /dev/md[*] 
-        ```
-        -> hiển thị tên mảng, mức độ RAID, trạng thái thiết bị, dung lượng sử dụng và khả dụng. 
-    - Giám sát:
-      - Cú pháp:
-        ```
-        sudo mdadm --detail /dev/md[*]
-        ```
+  
         -> hiển thị chi tiết về mảng RAID bao gồm cấu hình RAID, trạng thái thiết bị, thông tin partie, tốc độ truyền dữ liệu, ...
        
-    - Kiểm ra lỗi và đánh dấu
-      - Cú pháp:
-        ```
-        sudo mdadm --check /dev/md[*]
-        ```
-        -> Lệnh này sẽ quét mảng RAID để tìm kiếm lỗi và sau đó hiển thị thông tin về lỗi mà nó phát hiện được.
-        ```
-        sudo mdadm --fail /dev/md[*] [Device*]
-        ```
-        -> Lệnh này đánh dấu 1 thiết bị trong mảng có lỗi
-    - Sửa chữa lỗi:
-      - Cú pháp:
-        ```
-        sudo mdadm --repair /dev/md[*]
-        ```
-        -> Sau khi kiểm tra lỗi sử dụng lệnh này để sửa lỗi, chỉ thể thế sửa 1 số lỗi trong vùn có thể sửa như: lỗi parite, sử dụng đĩa dự phòng khôi phục dữ liệu khi lỗi, ...
     - Dừng mảng RAID và xóa 1 ổ khỏi mảng:
       - Cú pháp:
         ```
@@ -905,7 +879,7 @@
 
   - Kiểm tra I/O: Các bước tiến hành:
     - B1: Tạo 1 file `sysbench fileio --file-total-size=5G --file-num=5 prepare` với tổng dung lượng là 5G và có 5 file được tạo ra. Ở đây chúng ta sẽ nhìn thấy tốc độ ghi:
-      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/f705da04-de42-4102-9cc5-3a1768925ab1)
+     ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/66a62f2b-dcf7-4a04-9e1a-7d6dc8b09dbd)
 
     - B2: Ta kiểm tra tốc độ đọc bằng lệnh 'sysbench fileio --file-total-size=1G --file-num=1 --file-block-size=16M --file-test-mode=seqrd --time=300 run` với tổng dung lượng của file sử dụng để kiểm tra là 1Gb, số lượng tập tin được tạo và sử dụng trong bài kiểm tra là 1, Kích thước mỗi khối là 16M, Chế độ kiểm tra là đọc tuần tự (ngoài ra còn có chế độ `rndrd`: ngãu nhiên , ) với thời gian thực hiện 300s(5p).
       ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/4aa3db55-e534-46af-b0af-ee6bb9d8a325)
@@ -918,34 +892,69 @@
 #### Thực hiện bài LAB dựa trên những lý thuyết tìm hiểu ở trên và có những kết luận như sau:
 - So sánh RAID 0 và RAID 1:
   - Khả năng write:
-    - RAID 0:
-    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/dc5d9709-3df3-487d-839a-82ebd61f5537)
+    - RAID 0: Tốc độ tốt nhất
+      
+       ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/6d4188c7-517b-4a09-af71-6b7127aa55b2)
 
-    - RAID 1:
-  
 
-  - Khả năng read:
-    - RAID 0:
-    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/8a9748b7-38fd-4703-a1f8-5b2f047a4902)
+    - RAID 1: Tốc độ trung bình khá
+      
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/85cd3b42-26a2-4195-b9db-81b9863d61b7)
 
-    - RAID 1:
+  - Khả năng read: 
+    - RAID 0: 
+    
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/0f8e68f1-723d-44ed-bcda-8ccec0f3f0ab)
+
+
+    - RAID 1: 
+      
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/21946cec-f6ba-4e5b-a5d5-571c7bc98d0b)
+
 
 - So sánh RAID 0 với ổ thường:
   - Khả năng write:
-    - RAID 0:
-    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/dc5d9709-3df3-487d-839a-82ebd61f5537)
+    - RAID 0: 
 
-    - Ổ thường:
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/5903a10a-74c8-4da0-a773-d790d93cbe2e)
+
+
+    - Ổ thường: 
+
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/0aba0026-84c3-434d-a061-c92b992b2e1c)
+
   - Khả năng read:
-    - RAID 0:
-    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/4412a103-37ba-4eae-b1c8-f95876e0b4cc)
+    - RAID 0: 
+
+       ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/a6806d26-ada6-4e79-9655-15ccb6fc473b)
+
 
     - Ổ thường:
+      
       
 
 - So sánh RAID 1 với ổ thường
   - Khả năng write
+    - RAID 1:
+      
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/68b619ef-4d6f-4a76-b0b5-eb8a3d966fd9)
+
+    - Ổ thường:
+
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/cfd0e789-f997-4fb2-b847-c6f6ba2b96c3)
+ 
+
   - Khả năng read
+    - RAID 1:
+      
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/70fc31cc-a335-4145-846f-ed225c87dac9)
+      
+    - Ổ thường:
+
+
+    ###### Kết luận
+  - Khả năng đọc và ghi tốt nhất là RAID 0 khi so với ổ thường và RAID 1
+  - Khả năng ghi của RAID 1 chậm hơn ổ thường 1 chút. Khả năng đọc của RAID 1 tốt hơn ổ thường  
 ### Log và Logrotate và các vấn đề liên quan
 
 ### Cấu hình IP tĩnh IP động 
