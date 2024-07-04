@@ -301,7 +301,7 @@
     - Ta hoàn toàn có thể thay thế chuỗi bằng lệnh sed sau khi đã bôi đen với cú pháp như sau: `sed 's/pattern/replace/g' file1`
     
 ##### Byobu - Duy trì trạng thái làm việc
-- Byobu là 1 tiện ích để tạo ra các phiên làm việc. Với các tiện ích có thể cần như tạo, sửa xóa, chia đôi màn hình,...
+- **Byobu** là 1 tiện ích để tạo ra các phiên làm việc. Với các tiện ích có thể cần như tạo, sửa xóa, chia đôi màn hình,...
 - Việc sử dụng byobu cho Sys Adm là cần thiết bởi vì nó có thể làm việc với nhiều server cùng lúc và khi thực hiện điều đó ta cần SSH vào nhiều server. Trong quá trình làm việc nếu xảy ra các sự cố như mất điện, hay mất mạng phiên làm việc bị dừng lại thì các kết nối SSH sẽ bị mất nhưng nếu chúng ta sử dụng byobu thì chúng sẽ lưu tất cả bao gồm trạng thái đang làm việc các với các phiên làm việc kết nối với ssh đến server.
 - Các thao tác cơ bản với byobu:
   - Xem hướng dẫn: `Shift + F1`
@@ -801,21 +801,21 @@
   - RAID mềm là sử dụng phần mềm trên HĐH để quản lý mảng RAID.
   - Sự khác nhau giữa chúng dự trên: hiệu suất, độ tin cậy, chi phí, mức độ an toàn, khả năng mở rộng, khả năng tương thích.
 - Sử dụng RAID để tăng hiệu suất đọc ghi của hệ thống, bảo vệ dữ liệu, tăng dung lượng, tăng mức độ tin cậy khi sử dụng, ... các yếu tố đánh giá để phù hợp với mục đích sử dụng.
-- Phần mềm mdadm: giúp tạo, quản lý và giám sát RAID
-  - mdadm là 1 tiện ích dòng lệnh mạnh mẽ được sử dụng để quản lý các thiết bị RAID bao gồm việc tạo, cấu hình, giám sát, sữa chữa các mảng RAID.
-    - Tạo: Hỗ trợ nhiều cấp độ RAID 0 1 5 ...
-      - Cú pháp:
+#### Phần mềm mdadm: giúp tạo, quản lý và giám sát RAID
+- **mdadm** là 1 tiện ích dòng lệnh mạnh mẽ được sử dụng để quản lý các thiết bị RAID bao gồm việc tạo, cấu hình, giám sát, sữa chữa các mảng RAID.
+-  Tạo: Hỗ trợ nhiều cấp độ RAID 0 1 5 ...
+  - Cú pháp:
         ```
         sudo mdadm --create --verbose /dev/md[*] --level=[*] --raid-devices=[*]  [Device1] [Device2] ...
         ```
-        - Với
-          - `--create`: Biểu thị cho `mdadm` thực hiện thao tác tạo mảng RAID
-          - `--verbose`: Hiển thị thông tin chi tiết về quá trình tạo RAID
-          - `/dev/md[*]`: Xác định tên của thiết bị cho mảng RAID.
-          - `--level=[*]`: Các loại RAID 0,1,5, ...
-          - `--raid-devices=[*]`: Số lượng thiết bị tham gia vào RAID
-          - `[Device1] [Device2]`: Danh sách các thiết bị tham gia vào RAID
-          - Ngoài ra còn có các option khác: `--chuck`, `--metadata`, `--spare-devices`, `--name`, ...
+    - Với:
+      - `--create`: Biểu thị cho `mdadm` thực hiện thao tác tạo mảng RAID
+      -  `--verbose`: Hiển thị thông tin chi tiết về quá trình tạo RAID
+      -  `/dev/md[*]`: Xác định tên của thiết bị cho mảng RAID.
+      -  `--level=[*]`: Các loại RAID 0,1,5, ...
+      -  `--raid-devices=[*]`: Số lượng thiết bị tham gia vào RAID
+      - `[Device1] [Device2]`: Danh sách các thiết bị tham gia vào RAID
+      - Ngoài ra còn có các option khác: `--chuck`, `--metadata`, `--spare-devices`, `--name`, ...
     - Kiểm tra trạng thái sau RAID:
       - Cú pháp:
         ```
@@ -859,9 +859,18 @@
         sudo mdadm --remove /dev/md[*] [Device*]
         ```
         -> Xóa 1 thiết bị khỏi mảng RAID
-      
-      
+#### Công cụ sysbench - Đánh giá hiệu suất của hệ thống
+- **Sysbench**: Là 1 công cụ benchmark mã nguồn mở được sử dụng để kiểm tra và đánh giá hiệu suất trên hệ thống linux và các hệ điều hành khác. `sysbench` hỗ trợ các bài kiểm tra gồm cpu, I/O, bộ nhớ, ...
+- Cài đặt `sysbench` trên Ubuntu:
+  - B1: `sudo apt update`
+  - B2: `sudo apt install sysbench`
+- Các tính năng của `sysbench` để đánh giá hiệu suất
+  - Kiểm tra CPU
+  - Kiêm tra bộ nhớ
+  - Kiểm tra I/O:
+- Ứng dụng của `sysbench`
 ### Log và Logrotate và các vấn đề liên quan
+
 ### Cấu hình IP tĩnh IP động 
 ### Cron, at và các công cụ tự đông hóa
 ### Các dịch vụ DNS và DHCP
