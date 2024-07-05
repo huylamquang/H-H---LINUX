@@ -962,8 +962,60 @@
   - Khả năng đọc và ghi tốt nhất là RAID 0 khi so với ổ thường và RAID 1
   - Khả năng ghi của RAID 1 chậm hơn ổ thường 1 chút. Khả năng đọc của RAID 1 tốt hơn ổ thường  
 ### Log và Logrotate và các vấn đề liên quan
+- Logfile là những file liên quan đến nhật ký hoạt động của HĐH, nó chứa tất cả các thông tin quan trọng trong quá trình sử dụng HĐH: Tất cả các lỗi(phần cứng, phần mềm), quá trình khởi động hệ thống, quá trình đăng nhập, quá trình đăng nhập, ... Là nơi lưu trữ các thông tin, sự kiện quan trọng cùng những cảnh báo cụ thể.
+- Nội dung của file log thông thường gồm: Log về thông tin hệ thống( boot.log, kern.log, dmesg.log, syslog, ...), Log về thông tin bảo mật(auth.log, wtmp, btmp, ...), Log thông tin về các ứng dụng( apache2, nginx, ...), Log về thông tin mạng(syslog, kernlog, dmesg.log, ...).
+- Vị trí: Filelog nằm trong /var/log
+- Các file :
+  - **wtmp**: Chứa các bản ghi đăng nhập. Được sử dụng để tìm ra ai đã đăng nhập vào hệ thống( lệnh `who` được sử dụng trong filelog này để hiện thị thông tin).
+  - **btmp**: Các thông tin đăng nhập không thành công
+  - **vnetlib**: Là 1 thư viện mã nguồn mở cung cấp các chức năng mạng cho ứng dụng Python. Được sử dụng phổ biến trong các ứng dụng web và mạng để thực hiện các tác vụ như: gửi và nhận yêu cầu HTTP, quản lý kết nối TCP/IP, ...
+- Các thư mục chính trong /var/log:
+  - **Apache2**: Liên quan đến máy chủ web, lưu lại các yêu cầu truy cập vào máy chủ web và các lỗi xảy ra trên máy chủ web( lỗi ứng dụng, cấu hình, phần cứng, ...). Ghi lại địa chỉ IP và ID người dùng của tất cả máy khách thực hiện yêu cầu đến máy chủ. Lưu trữ thông tin về trạng thái của các yêu cầu truy cập cho dù phản hồi đã được gửi thành công hay yêu cầu dẫn đến lõi. Chứ các filelog:
+    - **Error**: Ghi lại những thông tin lỗi gặp phải của httpd
+    - **Access.log**: Ghi lại những thông tin về các yêu cầu nhận xác thực qua HTTP.
+  => Được sử dụng khi gặp bất kỳ sự cố nào liên quan đến máy chủ Apache.
+  - **Nginx**: Tương tự như apache2
+  - **cups**: Liên quan đến in ấn
+  - **openvpn**: : Liên quan đến kết nối VPN gồm lỗi và các sự kiện quan trọng.
+  - **sysstat**: Công cụ giám sát hệ thống
+  - **journal**: Chứa các tệp nhật ký được tạo bởi hệ thống systemd trong hệ điều hành Linux. Systemd là quá trình quản lý hệ thống chịu trách nhiệm khởi động và quản lý các dịch vụ hệ thống đồng thời cũng bao gồm hệ thống ghi nhật ký tích hợp.
+  - **installer**: Chứa các tệp nhật ký liên quan đến quá trình cài đặt hệ thống.
+  - **unattended-upgrades**: Là 1 gói tin ubuntu liên quan đến khả năng tự động cài đặt phần mềm.
+-  Các filelog chính trong /var/log:
+  - **boot.log**: Là nơi ghi lại các sự kiện xảy ra trong quá trình khởi động hệ thống, bao gồm tạo phần cứng tải kernel và khởi động dịch vụ. Được kiểm tra khi gặp các vấn đề liên quan đến tắt máy không đúng cách, khởi động lại hoặc khởi động lỗi hoặc là để xác định thời gian ngừng hoạt động của hệ thống do tắt máy đột ngột.
+  - **kern.log**: Kern là lõi của HĐH. Chứa các thông báo do kernel tạo ra, như sự cố phần cứng, sự cố trình điều khiển và sử dụng tài nguyên hệ thống. Được kiểm tra khi có lỗi xả ra với kernel hoặc có thể sử dụng khi gỡ lỗi các vấn đề phần cứng.
+  - **auth.log: Liên quan đến xác thực và ủy quyền: Các log này ghi lại các nỗ lực xác thực(đăng nhập ssh, sử dụng sudo, ...) và các sự kiện ủy quyền, bao gồm thành công và thất bại. Được sử dụng để theo dõi bảo mật, các vấn đề liên quan đến an toàn( điều tra các cuộc tấn công và các lỗ hổng liên quan đến cơ chế ủy quyền của người dùng).
+  - **dpkg.log**: Là tệp ghi lại các thông tin của dpkg( trình quản lý gói của debian) cung cấp thông tin theo dõi việc cài đặt, gỡ cài đặt, cập nhật gói, theo dõi các thay đổi được thực hiện đối với phần mềm hệ thống. Được sử dujg khi muốn kiểm tra phần mềm đã được cài đặt hay gỡ bỏ chính xác hay chưa. Kiểm tra khi thấy máy chủ có những hoạt động bất thường và nghi ngờ do phần mềm.
+  - **dmesg.log**: Theo dõi hoạt động hệ thống bao gồm các log liên quan đến thông báo khơi động kernel( giống kern.log) nhưng cũng có thể bao gồm thông tin động như phát hiện thiết bị phần cứng và tải trình điều khiển. Trong quá trình khởi động kernel phát hiện các thiết bị phần cứng vật lý được liên kết trong quá trình khởi động, nó sẽ ghi lại trạng thái thiết bị, lỗi phần cứng và các thông báo chung khác. Được kiểm tra khi mà có thiết bị phần cứng nào đó hoạt động không đúng hoặc không được phát hiện.
+  - **apport.log**(báo cáo lỗi và lỗi): Dịch vụ này tạo ra các log báo cáo về lỗi cũng như là sự cố khi vận hành và sử dụng ứng dụng. Những thứ này sẽ được gửi tới cho nhà phát triển để họ khắc phục sự cố phù hơp với cài đặt phần mềm và gỡ bỏ phần mềm.
+  - **alternatives.log**: Liên quan đến việc thay đổi các liên kết tuợng trưng của hệ thống - Sử dụng để theo dõi các thay thế liên kết tượng trưng của hệ thống, chuẩn đoán sự cố, giải quyết xung đột liên kết tượng trưng.
+  - **syslog**: Là filelog đầu tiên cần kiểm tra khi mà gặp sự cố nào đó vì nó chứa tất cả dữ liệu hoạt động trên toàn bộ hệ thống: tệp nhật ký trung tâm ghi lại thông báo từ nhiều dịch vụ và ứng dụng của hệ thống. Hoạt động như 1 bộ thu thập tất cả cho nhật ký không được hướng trực tiếp đến nơi khác. Cung cấp cái nhìn rộng hơn về hoạt động của hệ thống. Tức là những cái nào không có tệp log cố định thì sẽ được lưu ở đây.
+  - **ubuntu-advantage**: Là 1 dịch vụ có trả phí của ubuntu dành cho người dùng sử dụng các dịch vụ như: cập nhật phần mềm mở rộng, hỗ trợ kỹ thuật, ...
+  - **lastlog**: Ghi lại những lần đăng nhập thành công gần nhất của mỗi tài khoản user trên hệ thống.
+  - **faillog(có hoặc không)**: Theo dõi các nỗ lực đăng nhập thất bại, hỗ trợ theo dõi bảo mật, phát hiệ ra các cuộc tấn công. Được sử dụng để tìm ra các vi phạm bảo mật liên quan đến việc hack username và passwd.
+  - **frontconfig.log**: Liên quan đến font chữ, kiểu chữ.
+  - **gpu-manager.log**: Lưu trữ nhật ký hoạt động của trình quản lý GPU. Trình quản lý các GPU( card độ họa) trong hệ thống.
+  - **cronlog**: Lưu trữ các thông tin liên quan đến crond ví dụ như tiến trình nền cron khởi tạo 1 công việc, các thông báo lỗi liên quan. Tức là khi cron chạy 1 công việc được lập lịch trước đó thì những thông tin liên quan về tiến trình chạy công việc đó sẽ được lưu trong tệp nhật ký này bao gồm thực thi thành công, các thông báo lỗi nếu thực thi thất bại.
+- Logrotate và các tham số được sử dụng trong logrotate:
+  
+  ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/6e92ffed-3120-41f3-87a4-ddceb5699c44)
+
+  - Logrotate: Là 1 tiện ích quản lý nhật ký hệ thống trong HĐH Linux. Nó được thiết kế để tự động xoay, nén, xóa các tập tin nhật ký cũ, giúp quản lý dung lượng đĩa và duy trì các tập tin nhật ký 1 cách có hệ thống.
+  - Các tham số được sử dụng trong logrotate:
+    - `rotate 4`: được hiểu là giữ lại 4 file với giá trị 4 có thể thay thế
+    - `weekly`: Được hiểu công việc được diễn ra hàng tuần và có thể thay thế bằng `daily`, `yearly`, ...
+    - `notifempty`: Không thực hiện `logrotate` trên các file log trống.
+    - `missingok`: Vẫn thực hiện dù cho file không tồn tại.
+    - `compress`: Nén file có thể thay thế bằng `nocompress`
+    - `delaycompress`: Tức là sẽ không thực hiện nén file ngay lập tức mà chờ đến lượt sau mới nén nó.
+    - `sharescripts`: Tạo ra bản sao duy nhất cho khối tập lệnh ở giữa `postrotate`( chạy lệnh sau khi logrotate) và `endscript`( chạy sau khi logrotate) - `prerotate`(chạy lệnh trước khi logrotate). (sử dụng để chạy tập lệnh cho lần rotate tiếp theo).
+    - `create 0640 root adm`: cấp quyền cho fiel mới được tạo với chủ sỡ hữu là root và gr là adm với quyền 640(-rw-r-----).
+    Ngoài ra còn có 1 số lệnh được sử dụng:
+      - `nocreate`: Ngăn logrotate không tạo tệp log mới nếu tệp log không tồn tại.
+### Quản lý và phân quyền cho user, group
 
 ### Cấu hình IP tĩnh IP động 
+
 ### Cron, at và các công cụ tự đông hóa
 ### Các dịch vụ DNS và DHCP
 ### SSH và các lệnh sao chép SCP và đồng bộ hóa Rsync
