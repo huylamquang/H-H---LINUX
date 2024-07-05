@@ -1203,5 +1203,6 @@
       at 12am every Sunday report.sh | mail -s "baocaohangtuan" huyvt02dl@gmail -> Gửi 1 báo cáo hàng tuần vào lúc 12h trưa mỗi ngày chủ nhật.
     - Sử dụng At khi: Muốn thực hiện 1 công việc nào đó trong tương lai nhưng không có thời gian hoặc có việc bận không thể làm thì nên sử dụng At. Phù hợp với các tác vụ diễn ra trong tương lai nhưng không thường xuyên.
 ### Cấu hình IP tĩnh IP động 
-### Các dịch vụ DNS và DHCP
 ### SSH và các lệnh sao chép SCP và đồng bộ hóa Rsync
+### Các dịch vụ DNS và DHCP
+
