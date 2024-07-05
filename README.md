@@ -1203,6 +1203,117 @@
       at 12am every Sunday report.sh | mail -s "baocaohangtuan" huyvt02dl@gmail -> Gửi 1 báo cáo hàng tuần vào lúc 12h trưa mỗi ngày chủ nhật.
     - Sử dụng At khi: Muốn thực hiện 1 công việc nào đó trong tương lai nhưng không có thời gian hoặc có việc bận không thể làm thì nên sử dụng At. Phù hợp với các tác vụ diễn ra trong tương lai nhưng không thường xuyên.
 ### Cấu hình IP tĩnh IP động 
+#### Khi nào cấu hình ip tĩnh và khi nào cấu hình ip động
+- Cấu hình ip tĩnh khi: Làm việc với các máy chủ cần truy cập ssh, truyền tệp và đồng bộ hóa dữ liệu giữa các server và local, sử dụng các dịch vụ yêu cầu về ip tĩnh để có thể sử dụng, cấu hình triển khai, quản lý, hạn chế tấn công bởi ip tĩnh dễ dàng theo dõi và bảo mật.
+- Cấu hình ip động khi: Có vô số thiết bị cần kết nối mạng, khi sử dụng dịch vụ DHCP, muốn cấu hình 1 cách tự động để giảm thiểu công sức, thời gian. Thường xuyen ngắt kết nối, kết nối đến mạng. Ip động giúp cho khả năng truy cập liên tục và ip sẽ thay đổi trong 1 khoảng thời giân hoặc sau khi reboot máy.
+#### Cấu hình IP trên Ubuntu và CenOS:
+##### Trên Ubuntu
+- Các bước cấu hình Ip tĩnh trên Ubuntu:
+  - B1: Kiểm tra giao diện mạng: `ip a` --> eno1, ens33
+  - B2: Tạo 1 tệp `*.yaml` trong thư mục /etc/plan và chỉnh sửa nó bằng vim.
+  - B3: Thêm các dòng sau vài file `*.yaml` đó:
+    ```
+    network:
+      version: 2
+      ethernets:
+      ens33:
+        dhcp4: no
+        addresses:
+          - 10.10.10.100/24
+        gateway4: 10.10.10.2
+        nameservers:
+          addresses: 
+            - 8.8.8.8
+            - 4.4.4.4
+    ```
+  - B4: sử dụng lệnh `sudo netplan apply` để tiến hành khởi động lại dịch vụ và sử dụng `ip a` để kiểm tra
+- Các bước cấu hình Ip động trên Ubuntu:
+  - B1: Kiểm tra giao diện mạng `ip a`
+  - B2: Tạo tệp `*.yaml` trong thư mục /etc/plan và chỉnh sửa nó như sau
+    ```
+    network:
+      version:
+      ethernets:
+        ens33:
+          dhcp: true
+    ```
+  - B3: Khởi động lại dịch vụ `sudo netplan apply` và sử dụng `ip a` để kiểm tra
+#### Trên CenOS
+- Các bước cấu hinh Ip tĩnh trên CentOS:
+  - B1:
+  - B2:
+  - B3:
+  - B4:
+- Các bước cấu hình Ip động trên CentOS:
+  - B1:
+  - B2:
+  - B3:
+  - B4:
 ### SSH và các lệnh sao chép SCP và đồng bộ hóa Rsync
+#### Lý thuyết về SSH
+- SSH là 1 giao thức bảo mật được sử dụng thiết lập kết nối an toàn giữa người quản trị đến server. Nó hoạt động bằng cách mã hóa dữ liệu trên đường truyền giữa adm và server, đảm bảo dữ liệu khỏi bị nghe lén hoặc sửa đổi bởi những kẻ xâm nhập.
+- SSH được sử dụng phổ biến với nhiều mục đích khác nhau:
+  + Đăng nhập từ xa
+  + Truyền tệp
+  + Chuyển tiếp cổng
+  + Thực thi lệnh từ xa
+- SSH bao gồm 2 thành phần chính: Server - Client
+- Sử dụng giao thức SSH:
+  - Mặc định, máy chủ SSH chạy trên máy chủ từ xa, lắng nghe các kết nối đến trên cổng 22, trong khi máy khách SSH được sử dujg trên hệ thống cục bộ để liên lạc với máy chủ từ xa. Sử dụng giao thức TCP. Ở đây, khi thiết lập kết nối từ xa thông qua SSH là 1 đường hầm mã hóa được tạo ra giữa hệ thống cục bộ và hệ thống từ xa.
+  - Tại hệ thống cục bộ, các lệnh được gõ sẽ thông qua đường hầm an toàn này truyên đến hệ thống từ xa và ngược lại. Và SSH còn cho phép hầu hết các loại lưu lượng mạng được gửi qua đường hầm được mã hóa, tạo ra một loại mảng ảo riêng( VPN) giữa hệ thống cục bộ và hệ thống từ xa.
+  - Gói OpenSSH có chương trình có thể sử dụng đường hầm được mã hóa SSH để sao chép các tệp trên mạng. Lệnh sao chép `SCP` an toàn, được sử dụng như chương trình `copy` quen thuộc thể sao chép tệp tin.
+  - Tạo đường hầm cục bộ với -L là chuyển tiếp cổng cục bộ: `ssh -L 8080:remote-server.com:80 huylq@remote-server.com
+  - Tạo kết nối SSH với 1 máy từ xa và thiết lập 1 đường hầm SSH ngược: `	ssh -R 3306:localhost:8080 huylq@remote-server.com`.
+- Các bước thiết lập khóa phiên giữa client và server:
+  - B1: Client yêu cầu tạo 1 kết nôi TCP đến server
+  - B2: Sv chấp thuận và gửi cho Client khóa Pu của mình và server key được tái tạo theo mỗi khoảng thời gian nhất định.
+  - B3: Client nhận được khóa Pu của server. Sử dụng thuật toán mã hóa khóa đối xứng để tạo ra 1 key bí mật, sau đó sử dụng Ku của server để mã hóa key bí mật đó và gửi lên server.
+  - B4: Server giải mã bằng Kr của nó để xác thực rằng chính nó là server mà client đang tìm kiếm.
+  - B5: Phiên làm việc của client và server được mã hóa bằng chính key bí mất được tạo giữa client và server( Key đối xứng, cả 2 bên cùng có).
+- Quá trình xác thực người dùng giữa client và server
+  - Xác thực bằng passwd: client gửi kèm passwd của user truy cập tới server. SSH-AUTH sẽ so sánh mã băm của passwd với mã tướng ứng của user trong file /etc/shadow. Nếu phù hợp, server sẽ thông báo tới client xác thực thành công và client có thể truy cập tới server.
+  - Xác thực bằng key:
+
+    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/81f94820-5ea8-47a2-9553-c28eb62fea9f)
+
+  - Quá trình diễn ra như sau:
+    - B1: Client bắt đầu gửi ID Ku của mình đến server.
+    - B2: Server nhận đc ID và tìm kiếm trong file authorized_keys của mình. Nếu xuất hiện 1 Ku phù hợp với ID dc tìm thấy trong file thì lúc đó, server sẽ tạo ra 1 số ngẫu nhiên N và sử dụng Pu đó làm key để mã hóa N và gửi bản tin có chứa N được mã hóa đến client.
+    - B3: Client nhận được bản tin đó, sử dụng khóa Kr của mình giải mã tìm ra được số ngẫu nhiên N. Sau đó nó sẽ sử dụng key bí mật giữa client và server trước đó tạo tính ra được mã Hash MD5. Sau đó nó gửi mã Hash đó đến server nhằm xác thực client đó là client mà server muốn xác thực.
+    - B4: Server sử dụng khóa chung với client đã tạo ở giai đoạn thiết lập cùng với số N tính ra mã MD5. Sau khi nhận dược Mã Hash của client gửi lên thì lấy ra so sánh. Nếu trùng nhau thì xác thực được client( xác thực thành công). Ngược lại 2 mã Hash khác nhau thì đây không phải client mà nó muốn xác thực.
+- Quá trình cài đặt và thiết lập khóa giữa client và server.
+  - B1: Cài đặt dịch vụ trên 2 máy:
+    - Server:
+      ```
+      sudo apt install openssh-server openssh-client
+      systemctl start sshd
+      systemctl enable sshd
+      ```
+    - Client:
+      ```
+      sudo apt install openssh-client
+      ```
+  - B2: Thử kết nối đến server từ client sử dụng passwd:
+
+    ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/a1b59403-2097-4e26-a238-9b04b7d7b023)
+
+  - B3: Kết nối sử dụng khóa bất đối xứng từ client:
+    - Client: Tạo cặp khóa PU và PR `ssh-keygen -t rsa --> tạo 1 cặp khóa bằng thuật toán mã hóa RSA(SHA256) --> Tạo ra 1 cặp khóa Pu và Pr của client.
+
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/ba913985-4434-4a6e-8f92-8e510e38dd1c)
+
+    - Client: Copy cặp khóa Pu gửi lên client thông qua ssh bằng mật khẩu ssh hoặc sử dụng lệnh `ssh-copy-id huylq@ip_remote_server`
+
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/a59e2642-ef95-4803-ba5e-2ffde66439c3)
+  - B4: Kết nối từ client đến server bằng cặp khóa đx Pu, Pr
+
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/0d354ad3-840d-4813-bab2-07416b284b28)
+    - Lưu ý: Tắt chế độ logion Server bằng passwd trong `/etc/ssh/ssh_config` sau khi đã gửi khóa lên server.
+
+      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/b957200f-d3ea-45ef-9bfe-b70150d05580)
+
+#### Lệnh sao chép SCP và lệnh Rsync đồng bộ hóa dữ liệu
+
+
 ### Các dịch vụ DNS và DHCP
 
