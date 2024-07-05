@@ -1012,8 +1012,179 @@
     - `create 0640 root adm`: cấp quyền cho fiel mới được tạo với chủ sỡ hữu là root và gr là adm với quyền 640(-rw-r-----).
     Ngoài ra còn có 1 số lệnh được sử dụng:
       - `nocreate`: Ngăn logrotate không tạo tệp log mới nếu tệp log không tồn tại.
+      - `error`: Sử dung khi muốn nhận thông báo nếu tệp log không tồn tại.
+      - `startsize`: sử dụng để chỉ định kích thước ban đầu cho tệp log
+      - `copytruncate`: sử dụng để sao lưu tệp log trước khi logrotate. Nhưng nó sẽ cắt bớt tệp log sao cho đến kích thước của tệp log gốc.
+  - Mục đích của việc sử dụng filelog là:
+    - Khi có lỗi xảy ra, người quản trị có khả năng đưa ra phân tích và phương án giải quyết vấn đề 1 cách nhanh chóng khi filelog cung cấp chi tiết về các thông tin.
+    - Giúp Sysadm tìm thấy những rủi ro tiềm ẩn và kịp thời đưa ra phương án giải quyết 1 cách sớm nhất.
+    - Bảo mật là theo dõi các log bảo mật để tránh những truy cập trái phép.
+  - Cách để đọc filelog hiệu quả:
+    - Sử dụng các công cụ phù hợp với logfile:
+      - Trình soạn thảo văn bản Vim:
+      - Trình xem log và phân tích log chuyên dụng:  ELK stack, graylog, ...
+    - Hiểu biết về các định dạng filelog: Dạng văn bản thông thường và các định dạng nâng cao như `json`, `xml`, ...
+    - Tìm kiếm từ khóa và sử dụng biểu thức chính quy dựa trên các công cụ soạn thảo hoặc trình xem log.
+    - Lọc dữ liệu: 1 số công cụ phân tích log cho phép lọc
+    - Ghi lại các thông tin quan trọng trong quá trình kiểm tra các filelog
+    - Kiên nhẫn: Quá trình tìm kiếm diễn ra khá tẻ nhạt, nhàm chán vì vậy cần có sự kiên nhẫn để tìm ra vấn đề và giải quyết vấn đề đó.
 ### Quản lý và phân quyền cho user, group
+#### Quản lý chủ sỡ hữu và nhóm sở hữu
+- Là việc thay đổi quyền sỡ hữu file và thư mục cho user, group.
+- Các lệnh được sử dụng:
+  - Quản lý về chủ sở hữu user, group: Chown
+    - Cú pháp:
+      ```
+      chown [option] [user_name]:[group_name] [path_to file or dir]
+      ```
+    - Các option được sử dụng:
+      - `-R`: thay đổi quyên sỡ hữu cho tất cả các tệp tin và thư mục con trong thư mục
+      - `-v`: Hiển thị thông tin chi tiết về các thay đổi được thực hiện
+      - `-c`: Hiển thị thông tin chi tiết chỉ khi có thay đổi được thực hiện
+      - `-f`: Không hiển thị lỗi nếu lệnh không thể thay đổi quyền sỡ hữu của 1 tệp tin or thư mục.
+    - Ví dụ:
+      ```
+      chown -R huylq:huylq /home/huylq/Desktop/DATA5
+      chown -v huytl:huylq /home/huylq/Desktop/file1
+      ```
+  - Quản lý về chủ sỡ hữu group: Chgrp
+    - Cú pháp:
+      ```
+      chgrp [option] [group_name] [path_to file or dir]
+      ```
+    - Các option được sử dụng:
+      - `-R`: thay đổi nhóm sỡ hữu đệ quy(bao gồm thư mục con và các tệp con có trong thư mục
+      - `-v`: hiển thị thông tin chi tiết về các thay đổi khi thực hiện lệnh
+    - Ví dụ:
+      ```
+      chgrp -Rv huytl /home/huylq/Desktop/file5
+      ```
+#### Quản lý phân quyền cho user và group
+- Là việc quản lý các quyền đọc, ghi, thực thi của file và thư mục.
+  - Quyền `R`: Read - cho phép mở và đọc file. Lưu ý đối với Directory thì nếu có quyền `X` thì phải có thêm `R`
+  - Quyền `W`: Wirte - Cho phép thực hiện thao tác ghi và cắt tệp nhưng không cho phép xóa và đổi tên. Xóa và đổi tên phụ thuộc vào thuộc tính của thư mục. Đối với Directory là cho phép tạo, xóa, đổi tên
+  - Quyền `X`: Executive - Cho phép 1 tập tin được xử lý như một chương trình và thực thi. Các file script phải có cả quyền `R` để có thể thực thi.
+- Với hệ bát phân:
+  - Quyền `R`: tương đương với 4
+  - Quyền `W`: tương đương với 2
+  - Quyền `X`: tương đương với 1
+- Các lệnh được sử dụng:
+  - Lệnh chmod: sử dụng để phân quyền cho các file or thư mục với quyền `R`, `W`, `X`
+    - Cú pháp:
+      ```
+      chmod [option] MODE [path_to file or dir]
+      ```
+      - Với các option: `-R`, `v`, `c`, `f` Tương tự
+      - Với các mode:
+        - Dạng ký hiệu:
+          - `u`: chủ sỡ hữu
+          - `g`: nhóm sỡ hữu
+          - `o`: khác
+          - `a`: tất cả
+        - Các quyền:
+          - `r` - quyền đọc, `w` - quyền ghi, `x` - quyền thực thi
+          - Hệ bát phan: `4` - quyền đọc, `2` - quyền ghi, `1` - quyền thực thi, `0` - không có quyền
+        - Các phép toán:
+          - `+`: thêm quyền
+          - `-`: bỏ quyền
+          - `=`: đặt quyền chính xác
+        - Ví dụ:
+          ```
+          chmod -R +rx /home/huylq/Desktop/file2
+          chmod -v -rw /home/huylq/Desktop/file1
+          chmod  u=rw,g=rw,o=x  /home/huylq/Desktop/file3
+          chmod 444 /home/huylq/Desktop/DATA5
+          ```
+#### Tạo sửa xóa User,Group 
+- Tạo user, group: Là việc tạo ra 1 user mới
+  - Cú pháp:
+    ```
+    useradd [option] [new_user]
+    groupadd [option] [new_group]
+    ```
+  - Các option được sử dụng:
+    - `--create-home(-m)`: Tạo username với tên [*] và thư mục /home/[*]
+    - `--uid(-u)`: Chỉ định user id
+    - `--comment(-c)`: Thêm ghi chú để gợi nhớ user
+    - `passwd [user_name]`: Thực hiện sau khi tạo user và đặt mk cho user vừa tạo
+  - Ví dụ:
+    ```
+    useradd -m huytl
+    useradd -u 1906 huytl
+    useradd --comment "CMT" huytl
+    passwd huytl
+    ```
+- Sửa user, group: Là việc cập nhật user với các thay đổi
+  - Cú pháp:
+    ```
+    usermod [option] [name_user]
+    groupmod [option] [name_group]
+    ```
+  - Các option được sử dụng là:
+    - `-c`: Chỉnh sửa trường comment
+    - `--home(-d)`: Chỉnh sửa thư mục home của user
+    - `--expiredate(-e)`: Thay đổi thời gian hết hạn của người dùng
+    - `--login(-l)`: Chỉnh sửa tên đăng nhập
+    - `--lock(-L)`: Khóa user
+    - `--unlock(-U)`: Bỏ khóa user
+    - `-G`: Thêm user vào Gr mới nếu muốn thêm user vào nhiều gr thì  tùy chọn trở thành `-aG`
+  - Ví dụ:
+    ```
+    usermod -c "LQH" huylq
+    usermod -d /home/huylq huylq
+    usermod -L huylq
+    usermod -U huylq
+    usermod -G huytl huylq
+    usermod -e 2024-31-12 huylq
+    ```
+- Xóa user, Group: Thực hiện việc xóa user và group ra khỏi HĐH.
+  - Cú pháp:
+    ```
+    userdell [option] [user_name]
+    groupdel [option] [group_name]
+    ```
+  - Các option được sử dụng:
+    - `-r`: Xóa user và cả thư mục home của user
+    - `-f`: Bắt buộc xóa tài khoản user ngay cả khi đang đăng nhập or có quá trình đang chạy. Xóa các tệp tin của người dùng kể cả khi thư mục home nằm ở trên 1 FS khác.
+  - Ví dụ:
+    ```
+    userdel -r huytl
+    groupdel -r dev
+    ```
+#### File lưu trữ cấu hình và các thông tin quan trọng của user và group có trong HĐH
+- File /etc/passwd: Chứa các thông tin cụ thể về user 
+  ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/91653b5b-0366-409e-a5d2-d3d88e916446)
+  - Gồm các trường thông tin sau:
+    - Username: tên đăng nhập của user
+    - Passwd: Mk của user đã được mã hóa Hash.
+    - User ID: ID của user sử dụng để phân biệt
+    - Group ID: Nhóm chính của User này
+    - Comment: Mô tả về user này
+    - Home Directory: Thư mục home của người dùng.
+    - Shell: Môi trường shell được sử dụng
+- File /etc/shadow: Những bảo mật liên quan đến passwd của các tk user
 
+  ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/8fd8546c-9573-4db9-9acd-bb4486153f1d)
+
+  - Gồm các trường thông tin cụ thể:
+    - Tên user: huylq
+    - Mk đã được mã hóa:
+    - Ngày cuối cùng mk được thay đổi tính từ 1/1/1970: 19900
+    - Số ngày tối thiểu giữa các lần thay đổi mật khẩu: 0
+    - Số ngày tối đa mật khẩu có hiệu lực: 99999
+    - Số ngày cảnh báo khi mật khẩu sắp hết hạn: 7
+    - Số ngày sau khi mk hết hạn thì tk bị vô hiệu hóa: Không có giới hạn
+    - Ngày tài khoản hết hạn: Không bao giờ hết hạn
+    - Trường này hiện không được sử dụng
+- File /etc/group: Là file lưu trữ các thông tin quan trọng về nhóm người dùng trên HĐH
+  
+  ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/c280cdad-ad74-478c-8f38-874c053e0209)
+  - Gồm các trường thông tin:
+    - Groupname: tên nhóm
+    - Passwd: Chuỗi pw
+    - Group ID: ID Group giúp phân biệt các nhóm
+    - User: DS các user nhận Group này làm sencondary(nhóm phụ: là 1 nhóm mà 1 người dùng không phải là thành viên chính nhưng vẫn có thể là thành viên). 
+  
 ### Cấu hình IP tĩnh IP động 
 
 ### Cron, at và các công cụ tự đông hóa
