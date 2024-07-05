@@ -1184,9 +1184,24 @@
     - Passwd: Chuỗi pw
     - Group ID: ID Group giúp phân biệt các nhóm
     - User: DS các user nhận Group này làm sencondary(nhóm phụ: là 1 nhóm mà 1 người dùng không phải là thành viên chính nhưng vẫn có thể là thành viên). 
-  
+### Cron, at công cụ tự đông hóa các tác vụ
+- Cron, at: Là các lệnh được sử dụng để tự động hóa các tác vụ hằng ngày như: sao lưu dữ liệu, cập nhật phần mềm, gửi email, báo cáo, ...
+  - Lệnh Cron: `Crontab -e`
+    - Có 6 trường: **Phút** **Giờ** **Ngày** **Tháng** **Thứ** **Command**
+    - Ví dụ:
+      ```
+      * 3 * * * /script/abc.sh --> Thực hiện tác vụ trong file abc.sh vào 3h sáng mỗi ngày
+      30 17 * * * /script/abc.sh --> Thực hiện tác vụ trong file abc.sh vào 17h30 mỗi ngày
+      * * * */3 * /script/abc.sh --> Thực hiện tác vụ trong file abc.sh vào 3 tháng 1 lần
+      ```
+    - Cron được sử dụng để thực hiện các script vào những khoảng thời gian được setup sẵn. Tức là cron sẽ giúp chúng ta chạy các tác vụ chúng ta đã lên lịch sẵn nên không cần phải thực hiện chúng 1 cách thủ công. Diễn ra 1 cách liên tục trong 1 quãng thời gian dài, ... Phù hợp với các tác vụ diễn ra thường xuyên theo ngày, tuần, tháng, năm.
+  - Lệnh At: `at + [time cụ thể]
+    - vd:
+      ```
+      at 10am tomorow backup.sh --> chạy shell backup vào 10h sáng mai
+      at 1pm July 10 script.sh --> chạy script vào 1h chiều ngày 10/07 sắp tới.
+      at 12am every Sunday report.sh | mail -s "baocaohangtuan" huyvt02dl@gmail -> Gửi 1 báo cáo hàng tuần vào lúc 12h trưa mỗi ngày chủ nhật.
+    - Sử dụng At khi: Muốn thực hiện 1 công việc nào đó trong tương lai nhưng không có thời gian hoặc có việc bận không thể làm thì nên sử dụng At. Phù hợp với các tác vụ diễn ra trong tương lai nhưng không thường xuyên.
 ### Cấu hình IP tĩnh IP động 
-
-### Cron, at và các công cụ tự đông hóa
 ### Các dịch vụ DNS và DHCP
 ### SSH và các lệnh sao chép SCP và đồng bộ hóa Rsync
