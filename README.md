@@ -1313,7 +1313,86 @@
       ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/b957200f-d3ea-45ef-9bfe-b70150d05580)
 
 #### Lệnh sao chép SCP và lệnh Rsync đồng bộ hóa dữ liệu
-
-
+- Lệnh SCP: Sử dụng để copy file or dir từ local lên server và ngược lại
+  - Cú pháp:
+    ```
+    scp [option] [source] [destination]
+    ```
+  - Các option được sử dụng:
+    - `-r`: Sao chép đệ quy các thư mục
+    - `-v`: Hiển thị quá trình sao chép
+    - `-p`: duy trì quyền truy cập và thời gian sửa đổi
+  - Ví dụ:
+    ```
+    scp -vpr ~/Desktop/file3 huylq@192.168.18.166:/home/huylq/DATA1   --> copy dữ liệu file3 từ máy local lên server cho vào thư mục DATA1
+    scp vpr huylq@192.168.18.166:/home/huylq/DATA1 /home/huylq/Desktop/DATA5 --> copy dữ liệu từ thư mục DATA1 trên server xuống local được lưu vào thư mục DATA5
+    ```
+- Lệnh Rsync: Là giao thức truy cập từ xa rsync, cho phép rsync nhanh chóng phát hiện sự khác biệt giữa 2 thư mục và thực hiện số lượng sao chép tối thiểu cần thiết để đồng bộ hóa chúng. Điều này làm cho rsync sử dụng rất nhanh và tiết kiệm so với các loại chương trình sao chép khác. Rsync đuọc gọi là thế này:
+  - Cú pháp:
+    ```
+    Rysnc [option] [source] [destination]
+    ```
+  - Các option được sử dụng:
+    - `-a`: Đồng bộ tất cả bao gồm thuộc tính và các quyền
+    - `-v`: Hiển thị tiến trình sao chép
+    - `-z`: Nén dữ liệu trước khi truyền
+    - `-r`: Sao chép đê quy các thư mục
+  - Ví dụ:
+    ```
+    rysnc -avr ~/Desktop/Bai1 huylq@192.168.18.166:/home/huylq/Desktop/Bai2  --> Đồng bộ từ Local lên Server
+    rysnc -avr huylq@192.168.18.166:/home/huylq/Desktop/Bai2 /home/huylq/Desktop/Bai1 --> Đồng bộ từ Server về Local
+    ```
 ### Các dịch vụ DNS và DHCP
+#### Dịch vụ DNS
+- DNS là giao thức mạng, thuộc lớp ứng dụng trong mô hình OSI và TCP với chức năng chính là phân giải tên miền, ánh xạ địa chỉ IP thành tên miền và ngược lại. Sử dụng UDP port 53.
+- Các khái niệm liên quan:
+  - DNS có CSDL phân tán mạnh mẽ, không gian tên miền.
+  - Hoạt đông dựa trên nguyên tắc tra vấn hê thống DNS server.
+  - FQDN là tên miền đủ điều kiện, bao gồm: `hostname.domain.tld --> vd trang web `http://www.google.com/index.html` với:
+    - `http`: Là giao thức được sử dụng
+    - `www`: subdomain
+    - `google`: là domain name
+    - `.com`: là top-level domain (TLD or domain )(Là cấp cao nhất trong mô hình phân cấp)
+    - `index.html`: là file path
+ - Mô hình phân cấp:
 
+   ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/a6ae0916-9c66-4400-8b2e-46e10a1d9eed)
+   - Root name server: Lưu trữ thông tin về các máy chủ TLD cấp cao nhất. Giúp định hướng truy vấn các máy chủ DNS khác. Gồm 13 server trên toàn thế giới với 1 máy chủ chính tại Hoa Kỳ và 12 máy chủ phụ với 9 cái ở Hoa Kỳ, 2 cái ở EU, 1 cái ở Châu Á( Nhật bản). Là máy chủ đầu tiên mà resolver có thể truy vấn, đóng vai trò như cổng vào cho mọi truy vấn tên miền. Cụ thể, khi người dùng truy cập 1 trang web bất kỳ thì browser đó sẽ gửi truy vấn đến máy chủ DNS của ISP. DNS của ISP sẽ bắt đầu quá trình truy vấn bằng cách truy vấn DNS root namserver( vì đây là nơi lưu trữ thông tin về các máy chủ TLD vd:`.com`, `.vn`, `.jp`, ...) sau đó máy chủ DNS của ISP sẽ truy vấn máy chủ TLD để tìm kiếm máy chủ được ủy quyền cho trang web mà browser đó yêu cầu, máy chủ ủy quyền đó sẽ trả về địa chỉ IP cho trang web browser yêu cầu. Sau đó DNS ISP sẽ lưu dịa chỉ IP đó vào bộ nhớ cache và trả về địa chỉ IP cho browser.
+   - TLD: gTLD và ccTLD: `.com`, `.vn`, ... và `.vn`, `.uk`, `.us`, ...
+   - Domain name: chứa 2 phần SLD và TLD vd: TENTEN.VN thì SLD là `TENTEN` và TLD là `.VN`
+   - Hostname: Là nhãn được gán cho 1 dịch vụ mạng. Thông thường là phần đầu tiên của FQDN. VD www.quanh.com thì `www` là hostname.
+   - Subdomain: Nằm bên trái của SLD VD: Help.TENTEN.vn - thì `Help` là subdomain.
+ - Các loại server: Server chính, Server phụ, Server lưu đệm thường trực các ISP, máy chủ chuyển tiếp máy chủ lưu đệm, máy chủ DNS ẩn(nằm sau firewall).
+ - Nguyên lý truy vấn: Trình phân giải tạo truy vấn
+   - B1: Kiểm tra bộ nhớ đệm DNS của chính nó
+   - B2: Quá trình phân giải:
+
+     ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/121801f4-a735-4c26-a425-14e35ea579a5)
+     - 1. Kiểm tra bộ nhớ đệm của máy chủ DNS và chính nó tìm `www.example.com`
+       2. Nếu không tìm thấy nó sẽ bắt đầu truy vấn đệ quy của ISP - Bắt đầu quá trình truy vấn đệ quy
+       3. Hỏi đến server đệ quy( server này cũng tìm kiếm bản ghi trong bộ nhớ cache nếu có thì phản hồi - không thì nó sẽ hỏi server có thâm quyền cao hơn theo mô hình phân cấp).
+       4. Mô hình phân cấp(root nameserver -> TLD nameserver -> Authoritative nameserver)
+       5. Root nameserver dựa trên địa chỉ đó và chuển tiếp đến server thấp hơn chứa `.com` là TLD nameserver
+       6. TLD nameserver chuyển tiếp đến Authoritative nameserver chứa domain đó sau đó nó trả về cho server đệ quy.
+       7. Server đệ quy trả về cho Server local
+  - Có 3 loại truy vấn:
+    - Truy vấn đệ quy: Vì nó là mô hình phân cấp nên khi có yêu cầu cung cấp địa chỉ DNS thì nó hỏi bắt đầu từ server local -> server đệ quy -> server có thẩm quyền( Root nameserver -> Server TLD -> Server vùng) sau đó trả về server đệ quy -> trả về cho server local.
+    - Truy vấn không đệ quy: Kiểm tra máy chủ local( 1. có bản ghi về trang đó or 2. có thẩm quyền để cấp cho client)
+    - Truy vấn lặp lại: Hỏi từng server một - ban đầu cũng sẽ hỏi DNS server( server kiểm tra nếu nó không biết nó sẽ gửi thông tin về các server cấp cao hơn cho server DNS) -> (Root nameserver -> Chỉ đến Server TLD -> Chỉ đến Server zone). Tức là nếu server nào không biết nó sẽ chỉ đến server có thể biết cho client để cho client truy vấn.
+  - Các loại bản ghi DNS:
+    - SOA
+    - A
+    - AAAA
+    - PTR
+    - CNAME
+    - NS
+    - MX
+    - TXT
+- Xây dựng DNS Server cơ bản:
+#### Dịch vụ DHCP server
+- Khái niệm: Là 1 giao thức mạng, giao thức cấu hình sử dujg để cấp phát địa chỉ ip động. Giao thức ở lớp ứng dụng trong mô hình OSI. Cung cấp dịch vụ mạng cho các ứng dụng khác
+- Giao thức mạng: Là quy tắc và chuẩn mực quy định cách thức giao tiếp giữa các thiết bị trên mạng. Giao thức mạng đảm bảo dữ liệu được truyền 1 cách chính xác hiệu quả và an toàn.
+- DHCP server cung cấp Database để theo dõi các máy client trong hệ thống mạng để dễ dàng quản lý địa chỉ IP của chúng.
+- Phải thiết lập 
+
+     
