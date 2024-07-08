@@ -1368,7 +1368,7 @@
    - B2: Quá trình phân giải:
 
      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/121801f4-a735-4c26-a425-14e35ea579a5)
-     - 1. Kiểm tra bộ nhớ đệm của máy chủ DNS và chính nó tìm `www.example.com`
+       1. Kiểm tra bộ nhớ đệm của máy chủ DNS và chính nó tìm `www.example.com`
        2. Nếu không tìm thấy nó sẽ bắt đầu truy vấn đệ quy của ISP - Bắt đầu quá trình truy vấn đệ quy
        3. Hỏi đến server đệ quy( server này cũng tìm kiếm bản ghi trong bộ nhớ cache nếu có thì phản hồi - không thì nó sẽ hỏi server có thâm quyền cao hơn theo mô hình phân cấp).
        4. Mô hình phân cấp(root nameserver -> TLD nameserver -> Authoritative nameserver)
