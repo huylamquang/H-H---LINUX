@@ -1389,6 +1389,8 @@
     - MX: 
     - TXT
 - Xây dựng DNS Server cơ bản:
+  1. Các bước xây dựng
+  2. Những lưu ý quan trọng khi dựng Server DNS
 #### Dịch vụ DHCP server
 - Khái niệm: Là 1 giao thức mạng, giao thức cấu hình sử dujg để cấp phát địa chỉ ip động. Giao thức ở lớp ứng dụng trong mô hình OSI. Cung cấp dịch vụ mạng cho các ứng dụng khác
 - Giao thức mạng: Là quy tắc và chuẩn mực quy định cách thức giao tiếp giữa các thiết bị trên mạng. Giao thức mạng đảm bảo dữ liệu được truyền 1 cách chính xác hiệu quả và an toàn.
