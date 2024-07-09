@@ -1380,13 +1380,13 @@
     - Truy vấn không đệ quy: Kiểm tra máy chủ local( 1. có bản ghi về trang đó or 2. có thẩm quyền để cấp cho client)
     - Truy vấn lặp lại: Hỏi từng server một - ban đầu cũng sẽ hỏi DNS server( server kiểm tra nếu nó không biết nó sẽ gửi thông tin về các server cấp cao hơn cho server DNS) -> (Root nameserver -> Chỉ đến Server TLD -> Chỉ đến Server zone). Tức là nếu server nào không biết nó sẽ chỉ đến server có thể biết cho client để cho client truy vấn.
   - Các loại bản ghi DNS:
-    - SOA
-    - A
-    - AAAA
-    - PTR
-    - CNAME
-    - NS
-    - MX
+    - SOA: Bản ghi SOA là viết tắt của "Start of Authority", đây là 1 trong những bản ghi DNS quan trọng nhất và có trách nhiệm quản lý tên miền. Bản ghi SOA chứa thông tin quan trọng về tên miền và xác định máy chủ chính quản lý tên miền đó.
+    - A: Chuyển đổi domain name thành Ipv4
+    - AAAA: Chuyển đổi domain name thành Ipv6
+    - PTR: Chuyển đổi địa chỉ ip thành domain ( ngược lại với A và AAAA)
+    - CNAME: Bí danh tên miền. Giúp giảm lưu lượng truy cập vào 1 bản ghi. Tức là www.blog.com.vn có bí danh là blog.com.vn thì khi truy cập chỉ cần nhập blog.com.vn. Người dùng chỉ cần truy cập 1 trong 2 địa chỉ trên để có thể đến với trang web cần.
+    - NS: Name Server xác định máy chủ tên miền chịu trách nhiệm quản lý và lưu trữ bản ghi cho tên miền đó.
+    - MX: 
     - TXT
 - Xây dựng DNS Server cơ bản:
 #### Dịch vụ DHCP server
