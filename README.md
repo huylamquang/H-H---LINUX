@@ -1379,22 +1379,113 @@
     - Truy vấn đệ quy: Vì nó là mô hình phân cấp nên khi có yêu cầu cung cấp địa chỉ DNS thì nó hỏi bắt đầu từ server local -> server đệ quy -> server có thẩm quyền( Root nameserver -> Server TLD -> Server vùng) sau đó trả về server đệ quy -> trả về cho server local.
     - Truy vấn không đệ quy: Kiểm tra máy chủ local( 1. có bản ghi về trang đó or 2. có thẩm quyền để cấp cho client)
     - Truy vấn lặp lại: Hỏi từng server một - ban đầu cũng sẽ hỏi DNS server( server kiểm tra nếu nó không biết nó sẽ gửi thông tin về các server cấp cao hơn cho server DNS) -> (Root nameserver -> Chỉ đến Server TLD -> Chỉ đến Server zone). Tức là nếu server nào không biết nó sẽ chỉ đến server có thể biết cho client để cho client truy vấn.
-  - Các loại bản ghi DNS:
+  - Các loại bản ghi DNS: DNS record là bản ghi nằm trong DNS servers cung cấp thông tin về CSDL DNS, cho biết các tên miền, địa chỉ IP gắn với tên miền và cách xử lý tên miền đó ... Tất cả các tên miền trên internet đều phải có 1 vài bản ghi DNS cần thiết để người dùng có thể tru cập trang web khi nhập tẻn miền và thực hiện các mục đích khác.
     - SOA: Bản ghi SOA là viết tắt của "Start of Authority", đây là 1 trong những bản ghi DNS quan trọng nhất và có trách nhiệm quản lý tên miền. Bản ghi SOA chứa thông tin quan trọng về tên miền và xác định máy chủ chính quản lý tên miền đó.
     - A: Chuyển đổi domain name thành Ipv4
+      - Cú pháp:
+        ```
+        [Tên miền] IN A [Địa chỉ IP của máy]
+        ``` 
     - AAAA: Chuyển đổi domain name thành Ipv6
-    - PTR: Chuyển đổi địa chỉ ip thành domain ( ngược lại với A và AAAA)
+      - Cú pháp: tương tự A record
+    - PTR: Chuyển đổi địa chỉ ip thành domain ( ngược lại với A và AAAA). Bản ghi này giúp xác thực IP của các hostname gửi tới, giúp hạn chế bị spam mail, ...
+      - Cú pháp:
+        ```
+        [Địa chỉ IP] IN PTR [Tên miền]
+        ```
     - CNAME: Bí danh tên miền. Giúp giảm lưu lượng truy cập vào 1 bản ghi. Tức là www.blog.com.vn có bí danh là blog.com.vn thì khi truy cập chỉ cần nhập blog.com.vn. Người dùng chỉ cần truy cập 1 trong 2 địa chỉ trên để có thể đến với trang web cần.
+      - Cú pháp:
+        ```
+        [Tên bí danh] IN CNAME [Tên miền chinh]
+        ```
     - NS: Name Server xác định máy chủ tên miền chịu trách nhiệm quản lý và lưu trữ bản ghi cho tên miền đó.
-    - MX: 
-    - TXT
+      - Cú pháp:
+        ```
+        [Tên miền] IN NS [Tên máy chủ]
+      - Ví Dụ:
+        ```
+        dantri.com IN NS ns1.dantri.com
+        dantri.com IN NS ns2.dantri.com
+        ```
+        Trong ví dụ trên thì tên miền `dantri.com` sẽ được quản lý bởi 2 máy chủ tên miền là `ns1.dantri.com` và `ns2.dantri.com`. Tức là các DNS record(A, MX record, ...) của tên miền `dantri.com` sẽ được khai báo trên 2 máy chủ này.
+    - MX:  Là 1 DNS record giúp xác định mail server mà email được gửi tới. Một tên miền có thể có nhiều MX record, để tránh việc không nhận đc email nếu 1 mail server ngưng hoạt động.
+      - VD:
+         ```
+        dantri.vn  IN  MX 10 mx10.dantri.vn
+        dantri.vn  IN  MX 20 mx20.dantri.vn
+         ```
+         Trong đó 10 là giá trị ưu tiên. Số càng nhỏ độ ưu tiên càng cao. Trong ví dụ thì các mail có cấu trúc địa chỉ là `@dantri.vn` sẽ được gửi đến mail server `mx10.dantri.com` trước sau đó nếu gặp vấn đề sẽ gửi đến `mx20.dantri.vn`.
+    - TXT: Là 1 loại bản ghi giúp tổ chức các thông tin dạng text của tên miền. Một doamin có thể có nhiều bản ghi TXT và chúng chủ yếu được dùng cho các SPF(Sender Policy Framework) giúp email server xác định các thư được gửi đến có phải từ 1 nguồn đáng tin hay không. Ngoài ra nó còn dùng để xác thực máy chủ của 1 tê miền, xác minh SSL, ...
 - Xây dựng DNS Server cơ bản:
   1. Các bước xây dựng
-  2. Những lưu ý quan trọng khi dựng Server DNS
+     - Cài đặt các gói phần mềm phục vụ cho việc dựng DNS server:
+       ```
+       sudo apt install bind9 bind9utils bind9-doc -y` --> Cài đặt 3 gói phần mềm của bind 9
+       ```
+     - Kiểm tra trạng thái bind9:
+       ```
+       systemctl status bind9
+       ```
+     - Bắt đầu cấu hình các file liên quan:
+       - B1: Cấu hình file `named.conf`: Là tệp cấu hình chính của bind9 gồm `named.conf.options` và `named.conf.local`:
+         - Với `named.conf.options`:
+           - `acl`: Chỉ thị xác định mạng cục bộ `LAN` or `internal-network`
+           - `allow-query`: Chỉ thị xác định địa chỉ IP nào có thể truy vấn đến DNS server.
+           - `forwarders`: Chỉ thị xác định máy chủ DNS nào mà máy chủ này sẽ chuyển tiếp các truy vấn đệ quy tới.
+           - `recursion`: Chỉ thị cho phép truy vấn đệ quy tới máy chủ.
+             
+             ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/f2f9053c-5943-4620-a03e-edce23d035c2)
+             
+         - Với `name.conf.local`: Sử dụng để xác định vùng DNS cục bộ cho 1 tên miền riêng.
+             ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/5a382a0c-7c1c-4067-a65e-e9d3fcbfff06)
+           - Vùng chuyển tiếp(forward zone):
+             - `zone "toilamlab.com" IN`: Là định nghĩa của 1 vùng có tên là `toilamlab.com`. `IN` là viết tắt của internet
+             - `type master`: Là loại vùng master. Là máy chủ chính cho vùng này. Máy chủ chính có bản sao gốc của tất cả các bản ghi có trong vùng.
+             - `file "/etc/bind/zones/toilamlab.com"`: Đây là đường dẫn tới tệp tin chứa các bản ghi DNS cho vùng `toilamlab.com`.
+           - Vùng ngược( reveser zone):
+             - `zone "89.45.103.in-addr.arpa" IN`: Định nghĩa của 1 vùng ngược cho dải IP 103.45.89.x. Sử dụng để ánh xạ địa chỉ IP thành tên miền. Lưu ý, địa chỉ ip trong vùng này được viết ngược lại và thêm vào đuôi phần `.in-addr.arpa`.
+             - `type master: Tương tự vùng chuyển tiếp
+             - `file "/etc/bind/zones/toilamlab.com.rev"`: Tương tự vùng chuyển tiếp
+     - B2: Tạo ra thư mục zones và các tệp tin của vùng chuyển tiếp và vùng ngược:
+       - Tạo thư mục zones: `mkdir zones` trong thư mục `/etc/bind`
+       - Di chuyển đến thư mục zones và tạo ra các tệp cho vùng chuyển tiếp và vùng ngược:
+         - Tạo file `toilamlab.com` và cấu hình vùng chuyển tiếp này như sau:
+           
+           ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/a3d3ae88-8f9d-4e1f-a62a-258d4b77baf0)
+         - Tạo file `toilamlab.com.rev` và cấu hình vùng ngược như sau:
+
+           ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/167a6e4e-272b-4b64-a0cb-33914815af72)
+         - Kiểm tra các cấu hình đã chính xác hay chưa bằng lệnh:
+           ```
+           named-checkconf /etc/bind/named.conf.options
+           named-checkconf /etc/bind/named.conf.local
+           named-checkzone toilamlab.com /etc/bind/zones/toilamlab.com
+           named-checkzone toilamlab.com /etc/bind/zones/toilamlab.com.rev
+           ```
+      - B3: Khởi động lại bind9 `systemctl restart bind9`
+      - B4: Kiểm tra xem đã dựng thành công hay chưa
+        - Tại máy local: sau khi đã trỏ DNS server về Server DNS(IP: 103.45.89.45)
+          ```
+          nslookup primary.toilamlab.com
+          dig primary.toilamlab.com
+          ```
+          ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/ea3f6f2e-656f-4c13-bef2-8e0fc07c2f27)
+  3. Những lưu ý quan trọng khi dựng Server DNS
 #### Dịch vụ DHCP server
-- Khái niệm: Là 1 giao thức mạng, giao thức cấu hình sử dujg để cấp phát địa chỉ ip động. Giao thức ở lớp ứng dụng trong mô hình OSI. Cung cấp dịch vụ mạng cho các ứng dụng khác
+- Khái niệm: Là 1 giao thức mạng, giao thức cấu hình sử dujg để cấp phát địa chỉ ip động. Giao thức ở lớp ứng dụng trong mô hình OSI. Cung cấp dịch vụ mạng cho các ứng dụng khác.
 - Giao thức mạng: Là quy tắc và chuẩn mực quy định cách thức giao tiếp giữa các thiết bị trên mạng. Giao thức mạng đảm bảo dữ liệu được truyền 1 cách chính xác hiệu quả và an toàn.
 - DHCP server cung cấp Database để theo dõi các máy client trong hệ thống mạng để dễ dàng quản lý địa chỉ IP của chúng.
-- Phải thiết lập 
-
+- DHCP Replay Agent: Là 1 tính năng được cấu hình cho các router trung gian để tiếp nhận các bản tin yêu cầu cấp phát IP của các clients sau đó chuyển thông tin đến DHCP server. Là 1 tính năng, nơi chuyển đổi bản tin broadcast thành unicast.
+- DHCP daemon log( tệp nhật ký dhcpd): Là 1 dạng tệp ghi lại các hoạt động của máy chủ dhcp.
+- Các bản tin trong DHCP: Discover, Offer, Request, ACK, Nack, Decline, Release, ...
+  - Discover: Sử dụng để gửi đến DHCP server để yêu cầu 1 địa chỉ IP truy cập vào mạng. Nó gửi kèm cả địa chỉ MAC nhằm xác định được chính xác thiết bị đã gửi bản tin.
+  - Offer: Là 1 bản tin được gửi từ DHCP server xuống để phản hồi bản tin Discover từ client. Gói tin này chứa địa chỉ IP, cấu hình TCP/IP bổ sung.
+  - Request: Là 1 bản tin gửi từ Client lên DHCP server nhằm phản hồi về bản tin Offer và sự chấp nhận sử dụng IP có ở trong bản tin Offer
+  - ACK: Là 1 dạng bản tin từ DHCP gửi cho client. Xác nhận rằng chính thiết bị này với địa chỉ MAC này sử dụng IP này.
+  - NACK: Ngược lại với ACK. Khi Client gửi bản tin Request với địa chỉ IP cụ thể nhưng máy chủ DHCP không thể cung cấp địa chỉ đó thì bản tin NACK sẽ được DHCP phản hồi.
+  - Decline: Trường hợp DHCP quyết định tham  số được đề nghị nào không có giá trị tức là sau khi Client gửi bản tin Request, Server nhận được thông tin nhưng không khớp với thông tin đã cấp trước đó. Khi đó Server yêu càu thực hiện lại quá trình thuê.
+  - DHCP Release: Là quá trình client hoàn thành xong các công việc và gửi đến Server yêu cầu giải phóng địa chỉ IP và xóa bất kì IP đang còn tồn tại. Server sau đó sẽ thực hiện việc thu hồi địa chỉ IP và đánh dấu IP trống.
+  - Cài đặt DHCP server:
+    - B1: Cài đặt DHCP server: `sudo apt install isc-dhcp-server`
+    - B2: Mở file /etc/dhcp/dhcpd.conf và thay đổi các thông số cần thiết:
      
