@@ -2,11 +2,11 @@
 ## Các khái niệm và thao tác được sử dụng trong Linux
 ### 1. Các lệnh được sử dụng để thao tác với văn bản
 #### Các lệnh cơ bản thao tác với văn bản
-- pwd: Chuyển hướng thư mục làm việc
+- `pwd`: Chuyển hướng thư mục làm việc
 - history: Lệnh sử dụng để xem các lệnh đã được sử dụng trong quá khứ
   - `Ctrl + R`: Tìm lệnh đã từng sử dụng trong quá khứ
   - `Ctrl + S`: Stop công việc đang làm, hiểu như là treo máy và không làm gì cả. Ctrl + Q: để thoát ra khỏi chế độ stop công việc
-- cd: Chuyển hướng thư mục làm việc
+- `cd`: Chuyển hướng thư mục làm việc
   - Đường dẫn tuyệt đối: Đường dẫn đầy đủ địa chỉ đến 1 thư mục, 1 cách chính xác.
   - Đường dẫn tương đối: Không bao gồm đường dẫn đầy đủ của 1 thư mục.
   - Cú pháp
@@ -17,7 +17,7 @@
       ```
       cd /home/huylq -> Chuyển đến thư mục huylq
       ```
-- cat: sử dụng để đọc file, nối file, tạo file, ...
+- `cat`: sử dụng để đọc file, nối file, tạo file, ...
   - Cú pháp:
     ```
     cat [option] [name_file]
@@ -30,7 +30,7 @@
       cat file1 > file2 -> Ghi đè file1 lên file2.
       cat file1 >> file1 -> Nối file1 vào cuối file2.
       ``` 
-- sort: Là lệnh được sử dụng để sắp xếp cùng với các option sử dụng( mặc định là sắp xếp số trước, sau đó là sắp xếp theo ký tự từ A-Z - Sắp xếp theo cột đầu tiên).
+- `sort`: Là lệnh được sử dụng để sắp xếp cùng với các option sử dụng( mặc định là sắp xếp số trước, sau đó là sắp xếp theo ký tự từ A-Z - Sắp xếp theo cột đầu tiên).
   - Cú pháp:
     ```
     sort [option] [name_file]
@@ -45,7 +45,7 @@
       sort -r file1
       sort -u file1
       
-- uniq: Lệnh được sử dụng để loại bỏ các trùng lặp và chỉ loại bỏ các trùng lặp liên tiếp vì thế thường được sử dụng với `sort` để có thể loại bỏ hoàn toàn trùng lặp.
+- `uniq`: Lệnh được sử dụng để loại bỏ các trùng lặp và chỉ loại bỏ các trùng lặp liên tiếp vì thế thường được sử dụng với `sort` để có thể loại bỏ hoàn toàn trùng lặp.
   - Cú pháp:
     ```
     uniq [option] [name_file]
@@ -61,7 +61,7 @@
       Uniq -u file1
       Sort -nr file1 | uniq  -> sử dụng sort để sắp xếp ngược theo số sau đó dùng uniq để loại bỏ các dòng bị trùng.
       ```
-- wc: Là lệnh được sử dụng để in ra thông tin về số từ, số byte, số dòng và namefile
+- `wc`: Là lệnh được sử dụng để in ra thông tin về số từ, số byte, số dòng và namefile
   - Cú pháp:
     ```
     wc [option] [name_file]
@@ -78,7 +78,7 @@
       wc -L file1
       wc -mw file1
       ```
-- split: sử dụng để quản lý các tệp lớn có chức năng chia file thành các file nhỏ hơn và truyền tệp qua mạng có băng thông hạn chế, sử dụng với các công cụ khác.
+- `split`: sử dụng để quản lý các tệp lớn có chức năng chia file thành các file nhỏ hơn và truyền tệp qua mạng có băng thông hạn chế, sử dụng với các công cụ khác.
   - Cú pháp:
     ```
     Split [option] [name_file]
@@ -93,7 +93,7 @@
       split -b 1000 file1 file1.chia
       split -C 1024 file1 file1.chia
       ``` 
-- cut: Sử dụng để trích xuất các cột và các trường, thay thế ký tự cần thiết trong văn bản và có khả năng kết hợp tệp văn bản
+- `cut`: Sử dụng để trích xuất các cột và các trường, thay thế ký tự cần thiết trong văn bản và có khả năng kết hợp tệp văn bản
   - Cú pháp:
     ```
     cut [option] [name_file]
@@ -108,7 +108,7 @@
     cut -d':' -f3 file1
     cut -d':' -f1 file1 | cut -d'/' -f2 file2 -> Kết hợp cột 1 của file1 và cột 2 của file2 in ra màn hình.
     ```
-- head: Sử dụng để hiển thị nội dung của 10 dòng đầu tiên trong văn bản
+- `head`: Sử dụng để hiển thị nội dung của 10 dòng đầu tiên trong văn bản
   - Cú pháp:
     ```
     head [option] [name_file]
@@ -121,7 +121,7 @@
     head -n 5 file1
     head -c 100 file1 
     ```
-- tail: Lệnh sử dụng để hiển thị nội dung của các dòng cuối trong văn bản
+- `tail`: Lệnh sử dụng để hiển thị nội dung của các dòng cuối trong văn bản
   - Cú pháp:
     ```
     tail [option] [name_file]
@@ -134,7 +134,7 @@
     tail -n 20 file1
     tail -c 50 file1
     tail -f /var/log/syslog 
-- less: Dùng để đọc các file lớn, có thể cụôn trang lên hoặc cuộn trang xuống. Tìm kiếm trên, tìm kiếm dưới và được sử dụng để đọc các file log
+- `less`: Dùng để đọc các file lớn, có thể cụôn trang lên hoặc cuộn trang xuống. Tìm kiếm trên, tìm kiếm dưới và được sử dụng để đọc các file log
   - Cú pháp:
     ```
     less [option] [name_file]
@@ -147,7 +147,7 @@
     less -N file1
     less -F file1
     ```
-- tac: Là lệnh sử dụng để đọc file nhưng được sắp xếp từ dưới lên
+- `tac`: Là lệnh sử dụng để đọc file nhưng được sắp xếp từ dưới lên
   - Cú pháp:
     ```
     tac [option] [name_file]
@@ -161,7 +161,7 @@
     tac -s file1
     ```
 #### 2. Các lệnh nâng cao thao tác với văn bản
-- grep: Là lệnh được sử dụng để tìm kiếm chuỗi trong văn bản. Thường kết hợp với biểu thức chính quy để tìm kiếm sđt, ngày tháng năm, địa chỉ ip, ... có tỏng văn bản.
+- `grep`: Là lệnh được sử dụng để tìm kiếm chuỗi trong văn bản. Thường kết hợp với biểu thức chính quy để tìm kiếm sđt, ngày tháng năm, địa chỉ ip, ... có tỏng văn bản.
   - Cú pháp:
     ```
     grep [option] [pattern] [name_file]
@@ -193,7 +193,7 @@
        ```
        grep -E '([0-9]{1,3}\.){3}[0-9]{1,3}' file1
        ```
-- sed: Là trình chỉnh sửa luồng để lọc, được sử dụng để lọc và thực hiện các thao tác nâng cao bao gồm thay thế, thêm, sửa, xóa văn bản.
+- `sed`: Là trình chỉnh sửa luồng để lọc, được sử dụng để lọc và thực hiện các thao tác nâng cao bao gồm thay thế, thêm, sửa, xóa văn bản.
   - Cú pháp:
     ```
     sed [option] [name_file]
@@ -235,7 +235,7 @@
       sed -i '1a\toilamlab' file1
       ```
       Thêm text toilamlab vào sau dòng 1 của file1 và lưu trực tiếp vào file1.
-- awk: Là 1 ngôn ngữ giúp chúng ta thao tác dễ dàng với kiểu dữ liệu có cấu trúc và tạo ra những kết quả được định dạng. Được sử dụng để tìm kiếm và xử lý file text.
+- `awk`: Là 1 ngôn ngữ giúp chúng ta thao tác dễ dàng với kiểu dữ liệu có cấu trúc và tạo ra những kết quả được định dạng. Được sử dụng để tìm kiếm và xử lý file text.
   - Cú pháp:
     ```
     awk pattern actions file
@@ -397,7 +397,7 @@
           - R - Run( Đang thực thi or đang chờ để thực thi)
           - I - Edle( Nhàn rỗi - Không làm gì).
           - Z - Zombie( Các tiens tình con bị kết thúc có CTDL chưa được xóa khỏi bảng tiến trình).
-   - Lệnh htop: Là 1 lệnh được sử dụng để giám sát tiến trình, hiển thị các thông số về cpu, ram, loadavg, ... tương tự như top nhưng được hiển thị bằng các mầu sắc 1 cách trực quan hơn.
+   - Lệnh `htop`: Là 1 lệnh được sử dụng để giám sát tiến trình, hiển thị các thông số về cpu, ram, loadavg, ... tương tự như top nhưng được hiển thị bằng các mầu sắc 1 cách trực quan hơn.
      - Trong htop có thể sử dụng phím F1 để xme các hướng dẫn cụ thể hơn
  
        ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/afbf9e4f-d2c0-4c5b-afcc-b9dc604d907a)
@@ -418,8 +418,8 @@
          - Đỏ: Bộ nhớ swap đã sử dụng
          - Vàng: Bộ nhớ cache đã sử dụng
          - Xám:
-   - Lệnh kill và kill -9 cùng các loại tín hiệu:
-     - Lệnh kill và kill -9
+   - Lệnh `kill` và `kill -9` cùng các loại tín hiệu:
+     - Lệnh `kill` và `kill -9`
        - `kill [PID]` là kiểu thường, kiểu tín hiệu là sigterm, cho phép tiến trình hoàn thành và giải phóng tài nguyên, có khả năng lựa chọn xử lý tín hiệu.
        - `kill -9 [PID]` Là kiểu dứt điểm, kiểu tín hiệu là sigkill, bắt buộc chấm dứt ngay lập tức, không cho cơ hội làm thêm gì cả.
      - Các loại tín hiệu phổ biến:
@@ -428,8 +428,8 @@
        - Tín hiệu TSTP: Đây là tín hiệu được gửi bởi thiết bị đầu cuối khi nhấn `Ctrl + Z`. Không giống như STOP, tín hiệu TSTP được chương trình nhận nhưng chương trình có thể chọn bỏ qua nó
    - Lệnh ps: Hiển thị các thông tin về tiến trình nhưng tại 1 thời điểm cố định
      - Các tùy chọn:
-       - ps x: hiển thị các tiến trình hiện có
-       - ps aux: Hiển thị tất cả các tiến trình đang chạy với những thông in chi tiết:
+       - `ps x`: hiển thị các tiến trình hiện có
+       - `ps aux`: Hiển thị tất cả các tiến trình đang chạy với những thông in chi tiết:
          - User: User sử dụng tiến trình
          - Pid: ID của tiến trình
          - %Mem: % Mem mà tiến trình sử dụng
@@ -449,7 +449,9 @@
   vd: `cd /var/cache/apt/archives` -> Nơi lưu trữ file `*.deb` do người dùng tải về.
 - Repo là nơi lưu trữ thông tin về vị trí của package, khi cài đặt phần mềm nó sẽ trỏ đến các vị trí đó.
   vd: `cat /etc/apt/sources.list` -> mỗi dòng đại diện cho 1 kho lưu trữ phần mềm bao gồm các thông tin:
+
   ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/106e2fab-4194-424c-971c-726971a27878)
+  
   - Loại kho lưu trữ: ppa, deb
   - Vị trí của kho lưu trữ: URL
   - Tên Repo: jammy,...
@@ -462,7 +464,7 @@
     - B2: Giải nén mã nguồn
     - B3: Cài đặt các phụ thuộc mà phần mềm đó cần để có thể hoạt động được.
 - Các trình quản lý package của Debian(dpkg, apt)
-  - dpkg: Trình quản lý phần mềm được sử dụng để cài đặt, gỡ bỏ phần mềm
+  - `dpkg`: Trình quản lý phần mềm được sử dụng để cài đặt, gỡ bỏ phần mềm
   - Cách sử dụng:
     - `dpkg -l`: Liệt kê danh sách phần mềm đã cài đặt
     - `dpkg -i [*.deb]`: Cài đặt phần mềm với tệp *.deb
@@ -477,7 +479,7 @@
     - `apt update`: Cập nhật danh sách các package mới từ repo, sử dụng danh sách mới này để cài đặt phần mềm. Lưu ý, dùng thường xuyên và trước khi cài đặt phần mềm vì sẽ sử dụng danh sách các package mới.
     - `apt upgrade`: Nâng cấp các package lên phiên bản mới nhất và được sử dụng trước khi cài đặt 1 phần mềm để sử dụng package với phiên bản mới nhất.
 ### StartUp Scripts và các cách để chạy scripts mỗi khi mà server khởi động lại
-- Sử dụng StartUp Scripts: Tự động hóa các tác vụ sau khi hệ thống khởi động
+- Sử dụng `StartUp Scripts`: Tự động hóa các tác vụ sau khi hệ thống khởi động
   - Sử dụng Systemd:
     - B1: Viết Scripts
       ```
@@ -514,8 +516,8 @@
   - Quản lý quyền truy cập: Kiểm soát quyền truy cập vào tệp tin, đảm bảo rằng chỉ người dùng được ủy quyền mới có thể truy cập và sửa đổi.
   - Bảo vệ dữ liệu: Bao gồm các tính năng sao lưu và phục hồi để bảo vệ dữ liệu khỏi mất or hỏng.
   - Các loạt hệ thống tệp tin được sử dụng phổ biến cho server Linux:
-    - Ext4: Là 1 dạng FS có khả năng journaling, tương thích phần cứng, dung lượng cao, hiệu suất cao,... Không giới hạn về thư mục con trong 1 thư mục, có kích thước cố định. Sử dụng kĩ thuật phân bố trễ tức là nó sẽ trì hoãn phân bố các block trước khi dữ liệu được đưa vào để có thể tối ưu hóa không gian lưu trữ và chống phân mảnh dữ liệu. Phù hợp với những tệp nhỏ, bảo vệ hệ thống tệp và thư mục mở rộng. Phù hợp với máy chủ tệp trung tâm để chia sẻ nhóm. 
-    - XFS: Là 1 FS có khả năng journaling, và vô số tính năng tiên tiến như Snapshots, Quotas, ACLs, ... Phù hợp với các hệ thống tệp tin lưu trữ dữ liệu dung lượng lớn or có nhiều tập tin nhỏ, hiệu suất truy cập dữ liệu cao. Phù hợp với Khoa học dữ liệu(ML, DL, …). Phù hợp với việc truy xuất các tệp lớn mà không ảnh hưởng đến hiệu suất.
+    - **Ext4**: Là 1 dạng FS có khả năng journaling, tương thích phần cứng, dung lượng cao, hiệu suất cao,... Không giới hạn về thư mục con trong 1 thư mục, có kích thước cố định. Sử dụng kĩ thuật phân bố trễ tức là nó sẽ trì hoãn phân bố các block trước khi dữ liệu được đưa vào để có thể tối ưu hóa không gian lưu trữ và chống phân mảnh dữ liệu. Phù hợp với những tệp nhỏ, bảo vệ hệ thống tệp và thư mục mở rộng. Phù hợp với máy chủ tệp trung tâm để chia sẻ nhóm. 
+    - **XFS**: Là 1 FS có khả năng journaling, và vô số tính năng tiên tiến như Snapshots, Quotas, ACLs, ... Phù hợp với các hệ thống tệp tin lưu trữ dữ liệu dung lượng lớn or có nhiều tập tin nhỏ, hiệu suất truy cập dữ liệu cao. Phù hợp với Khoa học dữ liệu(ML, DL, …). Phù hợp với việc truy xuất các tệp lớn mà không ảnh hưởng đến hiệu suất.
   - Khả năng journaling và phân bố trễ trên Ext4:
     - Tính năng journaling: Là quá trình ghi nhật ký các thay đổi diễn ra. Cụ thể nó hoạt động như sau: Giả sử trong quá trình làm việc mà bị mất điện đột ngột hay xảy ra lỗi phần mềm. Thì nó sẽ hoạt động bằng cách ghi chép các thay đổi được thực hiện với hệ thống tệp trước khi chúng được ghi chép vào đĩa thực tế.
       - Ghi nhật ký các thay đổi: Khi đang thực hiện thao tác ghi or xóa dữ liệu, ext4 sẽ ghi chép các thay đổi này vào 1 nhật ký trước. Sau đó ghi vào bộ nhớ đệm tạm thời trong RAM. Khi hệ thống ổn định, ext4 sẽ ghi dữ liệu từ bộ nhớ đệm vào 1 hệ thống tệp trên ổ cứng.
@@ -528,8 +530,8 @@
   - Phân vùng logic: Nằm trong phân vùng mở rộng, được tạo thoải mái và lưu trữ dữ liệu giống như phân vùng chính. Yêu cầu bắt buộc là phải nằm trong phân vùng mở rộng.
 - Mục đích của việc sử dụng Partition là cải thiện hiệu suất đọc ghi, nâng cao khả năng quản lý dữ liệu , tối ưu hóa việc sử dụng dung lượng ổ 1 cách tối ưu nhất. Với mỗi 1 partition ta có thể sử dụng 1 FS riêng để phù hợp với mục đích sử dụng. Có thể hiểu rằng những dữ liệu quan trọng hoặc những dữ liệu cần được đảm bảo an toàn sẽ được sử dụng 1 FS có khả năng an toàn cao. Các loại dữ liệu sẽ được chia ra các phân vùng để dễ dàng quản lý và khi xảy ra sự cố tại phân vùng nào thì cso thể dễ dàng kiểm tra và xử lý.
 #### Các lệnh được sử dụng trong việc quản lý FS và Partition.
-- Lệnh Fdisk: Được sử dụng để tạo phân vùng trên ổ đĩa
-- Lệnh lsblk: Sử dụng để hiển thị các phân vùng cùng với mount thư mục nào. Sử dụng thêm tùy chọn -f để xem các phân vùng sử dụng FS nào. Thường được dùng trước khi tạo phân vùng.
+- Lệnh `Fdisk`: Được sử dụng để tạo phân vùng trên ổ đĩa
+- Lệnh `lsblk`: Sử dụng để hiển thị các phân vùng cùng với mount thư mục nào. Sử dụng thêm tùy chọn -f để xem các phân vùng sử dụng FS nào. Thường được dùng trước khi tạo phân vùng.
   - Cú pháp:
     ```
     sudo fdisk /dev/sda   -> Sau khi sử dụng lsblk để xem các pv được tạo trên ổ
@@ -541,7 +543,7 @@
     - `n`: thêm 1 phân vùng mới
     - `w`: lưu sau khi hoàn tất
     - `q`: thoát khỏi fdisk
- - Lệnh mkfs: Được sử dụng để tạo FS sau khi tạo phân vùng
+ - Lệnh `mkfs`: Được sử dụng để tạo FS sau khi tạo phân vùng
    - Cú pháp:
      ```
      mkfs -t [FS] -L [Label_name] /dev/sda1
@@ -550,15 +552,15 @@
      - `-t`: type fs được sử dụng
      - `L [name]`: gắn nhãn [name]
      - `-f`: Bỏ qua bất kỳ lỗi nào xảy ra trong quá trình tạo FS
- - Lệnh Mount và Umount: Sử dụng để gán 1 pv vào 1 thư mục được chỉ định.
+ - Lệnh `Mount` và `Umount`: Sử dụng để gán 1 pv vào 1 thư mục được chỉ định.
    - Cú pháp:
      ```
      mount -t [FS] /dev/sda1 [path_to_folder]
      ```
    - Mục đích sử dụng: Dễ dàng truy cập, sử dụng. Thực hiện các thao tác 1 cách dễ dàng và nhanh chóng. Có khả năng gắn kết các phân vùng vào thư mục với các kiểu định dạng FS khác nhau để phù hợp với mục đích sử dụng.
-   - Umount: Sử dụng để bảo vệ dữ liệu, giải phóng thiết bị lưu trữ, giải quyết sự cố khi gặp lỗi
+   - `Umount`: Sử dụng để bảo vệ dữ liệu, giải phóng thiết bị lưu trữ, giải quyết sự cố khi gặp lỗi
    - Cú pháp: `umount /dev/sda1`
-- Lệnh fsck: Được sử dụng để sửa lỗi FS
+- Lệnh `fsck`: Được sử dụng để sửa lỗi FS
   - Cú pháp:
     ```
     fsck -t [FS] /dev/sda1
@@ -567,13 +569,13 @@
 
      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/ba6eeaf2-6ca8-43ed-91f3-e997ef806f2a)
     - Các thông số được hiển thị bao gồm: Số file/Tổng số file, Số lượng block/Tổng số blocks:
-    - Tác dụng của Fsck là:
+    - Tác dụng của `Fsck` là:
       - Kiểm tra tính nhất quán của tệp: Fsck sẽ quét hệ thống tệp để xác định và sửa chữa các lỗi logic nếu thấy có lỗi về inode hoặc bản ghi metadata bị sai thì nó sẽ fix trực tiếp.
       - Sửa chữa lỗi hệ thống của tệp: Dựa vào các lỗi phát hiện được thì fsck hoàn toàn có thể sửa chữa được các lỗi hệ thống tệp phổ biến. Đối với các loại lỗi nghiêm trọng thì fsck sẽ đề xuất cho các user sữa chữa thủ công or là sao lưu dữ liệu trước khi sửa chữa.
       - Phục hồi dữ liệu: Tùy thuộc vào mức độ nghiêm trọng của lỗi và mức độ hỏng của hệ thống tệp, khả năng khôi phục dữ liệ của fsck được sử dụng trong 1 số trường hợp.
       - Sử dụng thường xuyên để kiểm tra và sữa chữa hệ thống tệp. Đặc biệt là sau khi xảy ra các sự cố đột ngột như cúp điện, ... Trước khi định dạng hệ thống tệp cũng nên sử dụng fsck để kiểm tra và sửa lỗi.
-- Lệnh df và du sử dụng để xem dung lượng file, block, inode được sử dụng
-  - Lệnh df: sử dụng để hiển thị tổng quan về dung lượng của toàn bộ hệ thống(mặc định hiển thị dưới dạng block)
+- Lệnh `df` và du sử dụng để xem dung lượng file, block, inode được sử dụng
+  - Lệnh `df`: sử dụng để hiển thị tổng quan về dung lượng của toàn bộ hệ thống(mặc định hiển thị dưới dạng block)
     
     ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/4170783e-bfef-41f1-b5b0-78f2c20426cb)
     - Cú pháp:
@@ -587,9 +589,9 @@
       - `-t[fs]`: hiển thị thông tin về pv sử dụng vd: `df -t ext4`
       - `-T`: thêm thông tin về fs sử dụng
     - Thông tin về block và inode:
-      - Block: là 1 đơn vị lưu trữ dữ liệu trên ổ. Kích thước thông thường là 4Kb, 8Kb, 16Kb. Kích thước càng lớn tốc độ càng nhanh nhưng ảnh hưởng đến việc tối ưu hóa dung lượng. 1 file có thể chứa nhiều blocks. Việc sử dụng block cho 1 file phụ thuộc vào kích thuớc của file.
-      - Inode: là 1 dạng cấu trúc dữ liệu lưu trữ thông tin về metadata bao gồm: quyền, kích thước, số lượng blocks, đường dẫn đến các dữ liệu của file, ...
-  - Lệnh du: Sử dụng để hiển thị chi tiết dung lượng từng file, thư mục tại vị trí sử dụng.
+      - **Block**: là 1 đơn vị lưu trữ dữ liệu trên ổ. Kích thước thông thường là 4Kb, 8Kb, 16Kb. Kích thước càng lớn tốc độ càng nhanh nhưng ảnh hưởng đến việc tối ưu hóa dung lượng. 1 file có thể chứa nhiều blocks. Việc sử dụng block cho 1 file phụ thuộc vào kích thuớc của file.
+      - **Inode**: là 1 dạng cấu trúc dữ liệu lưu trữ thông tin về metadata bao gồm: quyền, kích thước, số lượng blocks, đường dẫn đến các dữ liệu của file, ...
+  - Lệnh `du`: Sử dụng để hiển thị chi tiết dung lượng từng file, thư mục tại vị trí sử dụng.
  ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/6348ade8-03c7-42e1-8922-3d465ec8dc60)
 
     - Cú pháp:
@@ -622,7 +624,7 @@
   - `/lost + found`: Là 1 thư mục được sử dụng để khôi phục hệ thống tệp ext2,3,4. Nếu 1 tệp nằm trên hệ thống thông tin này không được đóng đúng cách và xảy ra lỗi phần mềm, sự cố hệ thống thì tệp đó sẽ được lưu trong thư lục `lost + found`.
 ### Các lệnh được sử dụng để tìm kiếm file: which, whereis, locate, find và các lệnh sử dụng để quản lý file: ls, ll, rm, cp, mv, touch, ln
 #### Các lệnh được sử dụng để tìm kiếm file
-  - Lệnh which: Lệnh sử dụng để tìm kiếm đường dẫn đến 1 thư mục, file
+  - Lệnh `which`: Lệnh sử dụng để tìm kiếm đường dẫn đến 1 thư mục, file
     - Cú pháp:
       ```
       which [command]
@@ -636,7 +638,7 @@
       which ln
       which ll
       ```
-  - Lệnh Whereis: Tượng tư như which nhưng có thêm đường dẫn đến thư mục man của lệnh đó
+  - Lệnh `whereis`: Tượng tư như which nhưng có thêm đường dẫn đến thư mục man của lệnh đó
     - Cú pháp:
       ```
       whereis [command]
@@ -650,7 +652,7 @@
       whereis cat
       whereis cut
       ```
-  - Lệnh locate: Lệnh tìm kiếm, thường được sử dụng cùng grep. Lệnh này tìm kiếm được dựa trên csdl có sẵn vì vậy trước khi tìm kiếm nên sử dụng lênh `updatedb` để có thể làm mới CSDL để có thể tìm kiếm dễ dàng và chính xác hơn. Sử dụng CSDL mlocate được tạo và cập nhật định kỳ để tìm kiếm file và thư mục.
+  - Lệnh `locate`: Lệnh tìm kiếm, thường được sử dụng cùng grep. Lệnh này tìm kiếm được dựa trên csdl có sẵn vì vậy trước khi tìm kiếm nên sử dụng lênh `updatedb` để có thể làm mới CSDL để có thể tìm kiếm dễ dàng và chính xác hơn. Sử dụng CSDL mlocate được tạo và cập nhật định kỳ để tìm kiếm file và thư mục.
     - Cú pháp:
       ```
       locate [pattern]
@@ -667,7 +669,7 @@
       ```
       locate zip | grep bin -> tìm kiếm các file nén với mẫu tìm kiếm "bin"
       ```
- - Lệnh Find: Lệnh tìm kiếm file hoặc thư mục trực tiếp trong hệ thống tệp tin. Có thể sử dụng được nhiều tiêu chí khác nhau để tìm kiếm bao gồm:
+ - Lệnh `find`: Lệnh tìm kiếm file hoặc thư mục trực tiếp trong hệ thống tệp tin. Có thể sử dụng được nhiều tiêu chí khác nhau để tìm kiếm bao gồm:
    - `-name`: Tìm kiếm theo tê
    - `-type f or d`: tìm kiếm theo file or directory
    - `-size +N`: tìm kiếm theo size
@@ -686,7 +688,7 @@
      find / -perm 777
      ```
 #### Các lệnh sử dụng để quản lý file và link
-- Lệnh ls: Là lệnh sử dụng để xem thông tin các file và thư mục có trong thư mục đang làm việc
+- Lệnh `ls`: Là lệnh sử dụng để xem thông tin các file và thư mục có trong thư mục đang làm việc
   - Cú pháp:
   ```
   ls [option]
@@ -702,12 +704,12 @@
       ls -a
       ls -al
   ```
-- Lệnh touch: Tạo file đơn giản
+- Lệnh `touch`: Tạo file đơn giản
   - Cú pháp:
     ```
     touch [name_file]
     ```
-- Lệnh cp: Lệnh copy nd của 1 file vào thư mục hoặc của 1 thư mục vào 1 thư mục.
+- Lệnh `cp`: Lệnh copy nd của 1 file vào thư mục hoặc của 1 thư mục vào 1 thư mục.
   - Cú pháp:
     ```
     cp [option] [path_source] [path_destination]
@@ -722,7 +724,7 @@
     cp -p file1 DATA1
     cp -pv file1 DATA2
     ```
-- Lệnh mv: Di chuyển file or thư mục đến nơi khác và có thể đổi tên.
+- Lệnh `mv`: Di chuyển file or thư mục đến nơi khác và có thể đổi tên.
   - Cú pháp:
     ```
     mv [option] [path_source] [path_destination]
@@ -737,7 +739,7 @@
     mv -rf DATA1 DATA2
     mv -vr file1 DATA1
     ```
-- Lệnh rm: Lệnh được sử dụng để xóa file, thư mục trong thẩm quyền của nó khỏi thư mục đang làm việc
+- Lệnh `rm`: Lệnh được sử dụng để xóa file, thư mục trong thẩm quyền của nó khỏi thư mục đang làm việc
   - Cú pháp:
     ```
     rm [option] [name_file]
@@ -751,7 +753,7 @@
     rm -vr DATA2
     rm -rvf DATA3
     ```
-- Lệnh ln: Lệnh đực sử dụng để gắn syslink vào thư mục or file
+- Lệnh `ln`: Lệnh đực sử dụng để gắn syslink vào thư mục or file
   - Liên kết cứng(hard link): Tạo ra 1 biệt danh cho tập tin đã tồn tại. Nó trỏ trực tiếp đến inode( chứa thông tin về dữ liệu tập tin) của tập tin gốc, chia sẻ chung dữ liệu với tập tin gốc. Thay đổi nội dung của 1 tệp được liên kết cứng sẽ ảnh hưởng đến tất cả tệp khác được liên kết cùng dữ liệu.
   - Liên kết mềm( Symbolic link): Giống như một phím tắt trỏ đến 1 tập tin hoặc thư mục khác. Nó lưu trữ đường dẫn đến tập tin gốc, không chia sẻ dữ liệu với tập tin gốc. Thay đổi vị trí or tên của tệp nguồn sẽ ảnh hướng đến liên kết mềm.
   - Cú pháp:
