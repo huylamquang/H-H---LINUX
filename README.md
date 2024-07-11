@@ -71,7 +71,7 @@
       - `-L`: Hiển thị dòng dài nhất của tệp
       - `-l`: Hiển thị số dòng
       - `-m`: Hiển thị số ký tự của tệp
-      - `-w`: Hiển thị số từ của tệp dựa trên khoảng trắng
+      - `-w`: Đếm số từ và hiển thị số từ của tệp, phân tách nhau bằng khoảng trắng
     - Ví dụ:
       ```
       wc -c file1
