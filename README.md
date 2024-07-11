@@ -1485,7 +1485,37 @@
   - NACK: Ngược lại với ACK. Khi Client gửi bản tin Request với địa chỉ IP cụ thể nhưng máy chủ DHCP không thể cung cấp địa chỉ đó thì bản tin NACK sẽ được DHCP phản hồi.
   - Decline: Trường hợp DHCP quyết định tham  số được đề nghị nào không có giá trị tức là sau khi Client gửi bản tin Request, Server nhận được thông tin nhưng không khớp với thông tin đã cấp trước đó. Khi đó Server yêu càu thực hiện lại quá trình thuê.
   - DHCP Release: Là quá trình client hoàn thành xong các công việc và gửi đến Server yêu cầu giải phóng địa chỉ IP và xóa bất kì IP đang còn tồn tại. Server sau đó sẽ thực hiện việc thu hồi địa chỉ IP và đánh dấu IP trống.
-  - Cài đặt DHCP server:
+  - Cài đặt DHCP server: 
     - B1: Cài đặt DHCP server: `sudo apt install isc-dhcp-server`
-    - B2: Mở file /etc/dhcp/dhcpd.conf và thay đổi các thông số cần thiết:
+    - B2: Cấu hình ip tĩnh cho server DHCP
+    - B3: Mở file /etc/dhcp/dhcpd.conf và thay đổi các thông số cần thiết:
+      - 38 dòng đầu tiên:
+
+        ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/0f23059b-6723-48ef-a85a-76da74fe4080)
+      - 39 - 75 dòng tiếp theo: Xóa dấu ghi chú `#` ở các dòng cần cấu hình và thay đổi 1 số thông tin cần thiết:
+
+
+        ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/1b80f560-ed07-4212-8bd6-1e021a758065)
+
+    - B4: Sau khi hoàn tất cấu hình và lưu cấu hình, thực hiện việc khởi động lại dịch vụ và kiểm tra trạng thái hoạt động:
+      - Khởi động lại dịch vụ: `systemctl restart isc-dhcp-server`
+      - Kiểm tra trạng thái dịch vụ: `systemctl status isc-dhcp-server`
+
+        ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/97d2f096-a580-4ea7-8c14-e52bdd68c5a8)
+    - B5: Kiểm tra trên máy local và kiểm tra danh sách cấp phát địa chỉ ip trên server:
+      - Trên máy local:
+
+        ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/36926365-f131-4f65-a127-51a6cd33887f)
+
+      - Trên server DHCP:
+
+        ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/e71f6d7f-a57f-4bce-9f56-e51846c124b5)
+
+      - Kết luận: Máy local được cấp phát địa chỉ IP `192.168.100.19` với địa chỉ MAC '00:0c:29:83:93:b2` trùng với địa chỉ IP và DHCP server cấp phát.
+      
+
+
+
+      
+
      
