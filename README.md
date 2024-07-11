@@ -106,7 +106,8 @@
     ```
     cut -c1-5 file1
     cut -d':' -f3 file1
-    cut -d':' -f1 file1 | cut -d'/' -f2 file2 -> Kết hợp cột 1 của file1 và cột 2 của file2 in ra màn hình.
+    cut -d':' -f1 file1
+    paste <(cut -d' ' -f1 file3) <(cut -d' ' -f3 file4) --> In ra cột thứ 1 của file 3 và cột thứ 3 của file1
     ```
 - `head`: Sử dụng để hiển thị nội dung của 10 dòng đầu tiên trong văn bản
   - Cú pháp:
@@ -154,11 +155,9 @@
     ```
   - Các option được sử dụng là:
     - `-n`: Hiển thị số dòng trước mỗi dòng đầu ra được đảo ngược
-    - `-s`: Loại bỏ số dòng khỏi đầu ra
   - Ví dụ:
     ```
     tac -n file1
-    tac -s file1
     ```
 #### 2. Các lệnh nâng cao thao tác với văn bản
 - `grep`: Là lệnh được sử dụng để tìm kiếm chuỗi trong văn bản. Thường kết hợp với biểu thức chính quy để tìm kiếm sđt, ngày tháng năm, địa chỉ ip, ... có tỏng văn bản.
@@ -168,9 +167,9 @@
     ```
   - Các option được sử dụng là:
     - `-i`: Không phân biệt chữ hoa chữ thường
-    - `-v`: in ra các dòng không chứa kết quả
+    - `-v`: In ra các dòng không chứa kết quả
     - `-c`: In ra số lượng kết quả khớp.
-    - `-n`: in ra kết quả khớp + số dòng
+    - `-n`: In ra kết quả khớp + số dòng
     - `-F`: **grep -F accounts.txt /etc/passwd** -> được hiểu là đọc các mẫu có trong file accounts.txt mỗi dòng trong tệp này sẽ là 1 mẫu riêng biệt sau đó mẫu này sẽ được so sánh với các dòng có trong tệp /etc/passwd nếu khớp thì nó sẽ in ra màn hình.
   - Ví dụ:
     - Các ví dụ cơ bản:
@@ -253,7 +252,7 @@
         Tách các trường nhất định:
         + $0: Chứa toàn bộ văn bản
         + $1: Chứa văn bản trường đầu tiên
-        + $2: chứa văn bản trường thứ hai
+        + $2: Chứa văn bản trường thứ hai
         + $(2+3): Kết quả của các biểu thức được sử dụng, đưa ra trường thứ năm
         + NF: là một biến tích hợp có chứa số lượng các trường trong bản ghi hiện tại. Vì vậy $NF đưa ra trường cuối cùng.
         ```
