@@ -130,7 +130,7 @@
   - Các option được sử dụng là:
     - `-n`: Hiển thị số dòng cuối cùng cần hiển thị
     - `-c`: Hiển thị số lượng byte cuối cùng được chỉ định
-    - `-f': Hiển thị các dòng mới được thêm vào tệp theo thời gian thực -> Được sử dụng trong việc kiểm tra các file log.
+    - `-f`: Hiển thị các dòng mới được thêm vào tệp theo thời gian thực -> Được sử dụng trong việc kiểm tra các file log.
   - Ví dụ:
     tail -n 20 file1
     tail -c 50 file1
@@ -296,7 +296,7 @@
     - `:wq`: thoát và lưu các thao tác thực hiện
     - ...
   - Chế độ Visual: Là chế độ được sử dụng để sao chép, xóa, dán văn bản.
-    - Cách thực diễn ra như sau: Để bước vào chế độ vim ta nhấn `v`. Từ vị trí nhấn `v` ta có thể sử dụng các phím điều hướng để bôi đen đoạn văn bản or sử dụng tổ hợp v + số dòng( tính từ vị trí con trỏ + số dòng). Sau đó nhấn `y` để copy đoạn vừa bôi đen or nhấn `d` để xóa.
+    - Cách thực diễn ra như sau: Để bước vào chế độ vim ta nhấn `v`. Từ vị trí nhấn `v` ta có thể sử dụng các phím điều hướng để bôi đen đoạn văn bản or sử dụng tổ hợp v + số dòng( tính từ vị trí con trỏ + số dòng). Sau đó nhấn `y` để copy đoạn vừa bôi đen or nhấn `d` để xóa. Có thể dán đoạn vừa copy bằng cách sử dụng `p` tại vị trí cần dán.
     - Ta hoàn toàn có thể thay thế chuỗi bằng lệnh sed sau khi đã bôi đen với cú pháp như sau: `sed 's/pattern/replace/g' file1`
     
 ##### Byobu - Duy trì trạng thái làm việc
