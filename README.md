@@ -1513,7 +1513,8 @@
         ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/e71f6d7f-a57f-4bce-9f56-e51846c124b5)
 
       - Kết luận: Máy local được cấp phát địa chỉ IP `192.168.100.19` với địa chỉ MAC '00:0c:29:83:93:b2` trùng với địa chỉ IP và DHCP server cấp phát.
-      
+
+      LAB - Bắt bản tin DHCP bằng wireshark
 
 
 
