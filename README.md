@@ -419,7 +419,7 @@
          - Xám:
    - Lệnh `kill` và `kill -9` cùng các loại tín hiệu:
      - Lệnh `kill` và `kill -9`
-       - `kill [PID]` là kiểu thường, kiểu tín hiệu là sigterm, cho phép tiến trình hoàn thành và giải phóng tài nguyên, có khả năng lựa chọn xử lý tín hiệu.
+       - `kill [PID]` là kiểu thường, kiểu tín hiệu là sigterm, cho phép tiến trình hoàn thành và giải phóng tài nguyên và tiến trình có khả năng xử lý or chặn tín hiệu này tức là bỏ qua yêu cầu này nếu cần thiết.( Cho phép tiến trình dọn dẹp, lưu trạng thái làm việc, thực hiện các hành động dọn dẹp trước khi kết thúc).
        - `kill -9 [PID]` Là kiểu dứt điểm, kiểu tín hiệu là sigkill, bắt buộc chấm dứt ngay lập tức, không cho cơ hội làm thêm gì cả.
      - Các loại tín hiệu phổ biến:
        - Tín hiệu KILL: Các tín hiệu khác có thể chọn xử lý tín hiệu được đưa đến, có thể bỏ qua các tín hiệu đó còn tín hiệu kill là chấm dứt hoàn toàn. Tức là Kernel sẽ ngay lập tức chấm dứt tiến trình.
