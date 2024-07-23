@@ -559,7 +559,7 @@
    - Mục đích sử dụng: Dễ dàng truy cập, sử dụng. Thực hiện các thao tác 1 cách dễ dàng và nhanh chóng. Có khả năng gắn kết các phân vùng vào thư mục với các kiểu định dạng FS khác nhau để phù hợp với mục đích sử dụng.
    - `Umount`: Sử dụng để bảo vệ dữ liệu, giải phóng thiết bị lưu trữ, giải quyết sự cố khi gặp lỗi
    - Cú pháp: `umount /dev/sda1`
-- Lệnh `fsck`: Được sử dụng để sửa lỗi FS
+- Lệnh `fsck`: Được sử dụng để sửa lỗi FS. fsck là giao diện chung cho các công cụ check và sửa các loại fs khác nhau. Ứng với mỗi loại công cụ là 1 loại fs.
   - Cú pháp:
     ```
     fsck -t [FS] /dev/sda1
