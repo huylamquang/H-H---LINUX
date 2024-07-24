@@ -406,25 +406,24 @@
          - Xanh lam: Các tiến trình với độ ưu tiên thấp
          - Xanh lục: Các tiến trình người dùng
          - Đỏ: Các tiến trình hạt nhân
-         - Vàng: Thời gian IRQ( ngắt phần cứng)
-         - Đỏ tươi:Thời gian Soft IRQ( Ngắt phần mềm)
          - Xám: Thời gian chờ IO
        - Với Mem:
          - Xanh lục: Bộ nhớ đã dùng
-         - Xanh dương: Bộ nhớ buffers
-         - Vàng: Bộ nhớ cache
+         - Xanh dương: Bộ nhớ buffers( sử dụng để tạm thời lưu trữ dữ liệu di chuyển giữa các thiết bị phần cứng và bộ nhớ chính).
+         - Vàng: Bộ nhớ cache( sử dụng để lưu trữ các bản sao của dữ liệu từ bộ nhớ chính để truy cập nhanh hơn). 
        - Với Swap:
          - Đỏ: Bộ nhớ swap đã sử dụng
          - Vàng: Bộ nhớ cache đã sử dụng
-         - Xám:
    - Lệnh `kill` và `kill -9` cùng các loại tín hiệu:
      - Lệnh `kill` và `kill -9`
        - `kill [PID]` là kiểu thường, kiểu tín hiệu là sigterm, cho phép tiến trình hoàn thành và giải phóng tài nguyên và tiến trình có khả năng xử lý or chặn tín hiệu này tức là bỏ qua yêu cầu này nếu cần thiết.( Cho phép tiến trình dọn dẹp, lưu trạng thái làm việc, thực hiện các hành động dọn dẹp trước khi kết thúc).
        - `kill -9 [PID]` Là kiểu dứt điểm, kiểu tín hiệu là sigkill, bắt buộc chấm dứt ngay lập tức, không cho cơ hội làm thêm gì cả.
      - Các loại tín hiệu phổ biến:
        - Tín hiệu KILL: Các tín hiệu khác có thể chọn xử lý tín hiệu được đưa đến, có thể bỏ qua các tín hiệu đó còn tín hiệu kill là chấm dứt hoàn toàn. Tức là Kernel sẽ ngay lập tức chấm dứt tiến trình.
-       - Tín hiệu CONT: Khôi phục tiến trình sau khi sử dụng STOP và TSTP, sử dụng lệnh fg và bg để gửi.
-       - Tín hiệu TSTP: Đây là tín hiệu được gửi bởi thiết bị đầu cuối khi nhấn `Ctrl + Z`. Không giống như STOP, tín hiệu TSTP được chương trình nhận nhưng chương trình có thể chọn bỏ qua nó
+       - Tín hiệu SIGHUP (1): Tín hiệu này thường được dùng để thông báo cho tiến trình rằng kết nối terminal đã bị ngắt. Nó cũng được dùng để yêu cầu tiến trình đọc lại các tệp cấu hình.
+       - Tín hiệu SIGINT (2): Tín hiệu này gửi từ bàn phím khi người dùng nhấn `Ctrl+C`. Nó yêu cầu tiến trình kết thúc.
+       - Tín hiệu SIGSTOP (19): Tín hiệu này tạm dừng tiến trình ngay lập tức.
+       - Tín hiệu SIGCONT (18): Tín hiệu này tiếp tục tiến trình đã bị tạm dừng bởi `SIGSTOP`
    - Lệnh ps: Hiển thị các thông tin về tiến trình nhưng tại 1 thời điểm cố định
      - Các tùy chọn:
        - `ps x`: hiển thị các tiến trình hiện có
