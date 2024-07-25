@@ -1262,8 +1262,8 @@
   - Mặc định, máy chủ SSH chạy trên máy chủ từ xa, lắng nghe các kết nối đến trên cổng 22, trong khi máy khách SSH được sử dujg trên hệ thống cục bộ để liên lạc với máy chủ từ xa. Sử dụng giao thức TCP. Ở đây, khi thiết lập kết nối từ xa thông qua SSH là 1 đường hầm mã hóa được tạo ra giữa hệ thống cục bộ và hệ thống từ xa.
   - Tại hệ thống cục bộ, các lệnh được gõ sẽ thông qua đường hầm an toàn này truyên đến hệ thống từ xa và ngược lại. Và SSH còn cho phép hầu hết các loại lưu lượng mạng được gửi qua đường hầm được mã hóa, tạo ra một loại mảng ảo riêng( VPN) giữa hệ thống cục bộ và hệ thống từ xa.
   - Gói OpenSSH có chương trình có thể sử dụng đường hầm được mã hóa SSH để sao chép các tệp trên mạng. Lệnh sao chép `SCP` an toàn, được sử dụng như chương trình `copy` quen thuộc thể sao chép tệp tin.
-  - Tạo đường hầm cục bộ với -L là chuyển tiếp cổng cục bộ: `ssh -L 8080:remote-server.com:80 huylq@remote-server.com
-  - Tạo kết nối SSH với 1 máy từ xa và thiết lập 1 đường hầm SSH ngược: `	ssh -R 3306:localhost:8080 huylq@remote-server.com`.
+  - Tạo đường hầm cục bộ với -L là chuyển tiếp cổng cục bộ: `ssh -L 8080:remote-server.com:80 huylq@remote-server.com`
+  - Tạo kết nối SSH với 1 máy từ xa và thiết lập 1 đường hầm SSH ngược: `ssh -R 3306:localhost:8080 huylq@remote-server.com`.
 - Các bước thiết lập khóa phiên giữa client và server:
   - B1: Client yêu cầu tạo 1 kết nôi TCP đến server
   - B2: Sv chấp thuận và gửi cho Client khóa Pu của mình và server key được tái tạo theo mỗi khoảng thời gian nhất định.
