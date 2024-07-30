@@ -334,7 +334,7 @@
          ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/0fc0271e-d3f0-488d-b5ab-4e676829d1e8)
 
         - Hiển thị về thời gian hiện tại - Thời gian đã sử dụngg.
-        - Số lượng user sử dụng
+        - Số lượng người dùng hiện tại đang đăng nhập vào hệ thống.
         - Load Average: Tải trung bình là 1 tham số cần chú ý. Là số lượng tiến trình cần tài nguyên tính tóa từ CPU trong khoảng thời gian(5p, 10p, 15p). Lượng tiến trình cần duy trì trong khoảng từ 0 đến số lượng CPU có thể có, tức là nếu CPU có 6 core thì lượng tiến trình ở mức cho phép là 1-6 tiến trình. Nếu vượt quá thì sẽ có 1 số vấn đề xảy ra:
           - Hiệu suất hệ thống giảm vì có quá nhiều tiến trình phải đợi CPU xử lý, mỗi tiến trình sẽ được chia nhỏ thời gian xử lý.
           - Tăng thời gian phản hồi: Các yêu cầu của người dùng chờ được phản hồi sẽ tăng lên đáng kể vì CPU đang bận xử lý các tiến trình.
@@ -346,6 +346,7 @@
           - Với disk I/O, Network Traffic: Nếu lượng CPU sử dụng vẫn bình thường( tức không quá cao) nhưng loadavg vẫn cao hơn số CPU đang có. Ta có thể kết luận có thể disk I/O or Network Traffic hoặc cả 2 yếu tố chính gây ra tải cao cho hệ thống.
           - Tiến trình đi vào CPU để xử lý. CPU sẽ truy cập vào disk để lấy thông tin các rows. Tại thời điểm này CPU sẽ Idle và chờ disk phản hồi, đây chính là thời điểm waiting on disk.
         - Tổng quát lại : nếu phần trăm I/O wait lớn (1/số lượng cpu) * 100% thì đây là lúc bạn cần phải xem xét lại disk I/O hệ thống của mình. High I/O wait phụ thuộc vào số lượng CPU server đang có. 50% iowait của server 2 cpu chỉ tương đương với 12.5% iowait trên server có 8 cpu. Tỉ lệ nghịch với số lượng cpu của server. Số lượng CPU càng cao thì iowait càng thấp.
+        - `swapfile`: Là 1 thành phần của bộ nhớ ảo trong hệ điều hành và được lấy từ chính ổ cứng. Dùng để mở rộng bộ nhớ vật lý RAM khi nó không còn đủ để xử lý tất cả các tiến trình và dữ liệu hiện tại.
       + Dòng 2:
      
         ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/dee05ee7-e72a-4fe7-8e29-4e2c07c3d330)
@@ -420,6 +421,7 @@
      - Lệnh `kill` và `kill -9`
        - `kill [PID]` là kiểu thường, kiểu tín hiệu là sigterm, cho phép tiến trình hoàn thành và giải phóng tài nguyên và tiến trình có khả năng xử lý or chặn tín hiệu này tức là bỏ qua yêu cầu này nếu cần thiết.( Cho phép tiến trình dọn dẹp, lưu trạng thái làm việc, thực hiện các hành động dọn dẹp trước khi kết thúc).
        - `kill -9 [PID]` Là kiểu dứt điểm, kiểu tín hiệu là sigkill, bắt buộc chấm dứt ngay lập tức, không cho cơ hội làm thêm gì cả.
+       - `killall [name_prosess]` kill mặc định nhiều tiến trình với các pid khác nhau 1 cách nhanh chóng.
      - Các loại tín hiệu phổ biến:
        - Tín hiệu KILL: Các tín hiệu khác có thể chọn xử lý tín hiệu được đưa đến, có thể bỏ qua các tín hiệu đó còn tín hiệu kill là chấm dứt hoàn toàn. Tức là Kernel sẽ ngay lập tức chấm dứt tiến trình.
        - Tín hiệu SIGHUP (1): Tín hiệu này thường được dùng để thông báo cho tiến trình rằng kết nối terminal đã bị ngắt. Nó cũng được dùng để yêu cầu tiến trình đọc lại các tệp cấu hình.
@@ -440,7 +442,7 @@
          - STAT: R - Running  ; S - Sleeping ; D - Ngủ kh gián đoạn ; T - Đã dừng lại ; Z - tiến trình k tồn tại or hoặc là zombie ; “<” - tiến trình có mức độ ưu tiên cao ; N - Tiến trình có mức độ ưu tiên thấp ; I - Trạng thái nhàn rỗi.
          - START: Thời gian bắt đầu chạy
          - TIME: Thời gian đã chạy
-         - COMMAND: Lệnh sử dụng
+         - COMMAND: Lệnh tiến trình sử dụng, thông tin về chương trình, đường dẫn đến tệp. 
 ### Phần mềm và các vấn đề liên quan đến phần mềm
 - Package là 1 dạng tệp tin chứa các thành phần để cài đặt 1 phần mềm: Tệp thực thi, tệp cấu hình, tệp thư viện, tệp hướng dẫn.
 - Depend là sự phụ thuộc của 1 phần mềm đang được cài đặt vào 1 phần mềm khác.
