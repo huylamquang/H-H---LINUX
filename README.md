@@ -772,7 +772,7 @@
     ```
     
 ### RAID và các vấn đề liên quan
-- RAID: Là việc lưu trữ dữ liệu trên nhiều ổ với mục đích tăng hiệu suất đọc ghi, tối ưu hóa việc sử dụng dung lượng lưu trữ. Đặc biệt là cơ chế dự phòng.
+- RAID: Là việc kết hợp lưu trữ dữ liệu trên nhiều ổ thành 1 mảng với mục đích tăng hiệu suất đọc ghi, tối ưu hóa việc sử dụng dung lượng lưu trữ. Đặc biệt là cơ chế dự phòng.
 - Các loại RAID phổ biến:
   - RAID 0: Được hình thành từ 2 ổ trở lên và lưu trữ đều trên 2 ổ
     - VD: Với 8 đoạn dữ liệu 1 -> 8 thì RAID 0 sẽ lưu trữ các đoạn dữ liệu 1 cách xen kẽ trên 2 ổ, tức là các đoạn dữ liệu 1,3,5,7 sẽ được lưu tại ổ 1 và đoạn dữ liệu 2,4,6,8 sẽ được lưu tại ổ 2. Điều này giúp tận dụng tối đa sức mạnh của tất cả các ổ.
@@ -783,7 +783,7 @@
   - RAID 1: Được cấu thành từ ít nhất 2 ổ. Các đoạn dữ liệu đuọc lưu trữ song song trên cả 2 ổ
     - VD: Có 4 đoạn dữ liệu. 4 đoạn dữ liệu này sẽ được lưu trữ song song trên cả 2 ổ. Tức là 1 ổ sẽ lưu trữ và 1 ổ sẽ backup lại dữ liệu từ ổ đã lưu trữ.
     - Ưu điểm: Ngược lại với RAID 0 thì RAID 1 có độ an toàn về dữ liệu ở mức tốt khi mà dữ liệu được lưu trữ song song trên 2 ổ, trong trường hợp 1 ổ xảy ra sự cố thì vẫn còn ổ còn lại lưu trữ dữ liệu.
-    - Nhược điểm: Hiệu suất không cao. Khả năng ghi chậm hơn ổ thường vì phải ghi đồng thời lên 2 ổ riêng biệt.
+    - Nhược điểm: Hiệu suất không cao. Khả năng ghi chậm hơn ổ thường vì phải ghi đồng thời lên 2 ổ riêng biệt. Khả năng đọc thì nhanh hơn ổ thường
     - Phù hợp: Dựa vào ưu nhược điểm thì cho thấy RAID 1 phù hợp với các dịch vụ yêu cầu về an toàn dữ liệu.
     - So sánh với ổ thường: Khả năng đọc ngang ngửa nhưng khả năng ghi chậm hơn nhiều vì phải ghi trên cả 2 ổ.
   - RAID 5: Cần tối thiểu 3 ổ để cấu thành. Cả 3 ổ sẽ trực tiếp lưu trữ dữ liệu khác nhau cùng với đó là quá trình tính toán giá trị chẵn lẽ dựa trên dữ liệu cũng được thực hiện sau đó được lưu vào từng ổ để có khả năng backup cho dũ liệu từng ổ.
