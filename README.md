@@ -288,7 +288,9 @@
     - `yw`: sao chép từ
     - `yy`: sao chép dòng
     - `u`: Hoàn tác | `Ctrl + r`: Tiến tới hành động đã hoàn tác
-    - `i và o`: Bước vào chế độ Insert 
+    - `i và o`: Bước vào chế độ Insert
+    - Thay thế text trên toàn file: `:%s/pattern/replace/g` thay thế tất cả các lần xuất hiện của pattern.
+    - Thay thế text trong 1 phạm vi cụ thể: `:m,n s/pattern/replace/g` thay thế trong khoảng từ dòng m đến dòng n pattern bằng replace.
   - Chế độ chèn( insert): Là chế độ để ta có thể thực hiện các thao tác nhập từ bàn phím làm việc với văn bản.
   - Chế độ Ex: Là các lệnh được đặt sau dấu "**:**" như:
     - `:q!`: thoát và không lưu các thao tác
