@@ -449,15 +449,10 @@
   vd: `sudo apt-cache depends firefox`
 - Binary Package là 1 dạng package. Nó được biên dịch sẵn mà không cần tới mã nguồn khi muốn cài đặt phần mềm, là những tệp dạng `*.deb`
   vd: `cd /var/cache/apt/archives` -> Nơi lưu trữ file `*.deb` do người dùng tải về.
-- Repo là nơi lưu trữ thông tin về vị trí của package, khi cài đặt phần mềm nó sẽ trỏ đến các vị trí đó.
-  vd: `cat /etc/apt/sources.list` -> mỗi dòng đại diện cho 1 kho lưu trữ phần mềm bao gồm các thông tin:
-
+- Repo là kho lưu trữ 
+  vd: `cat /etc/apt/sources.list` -> mỗi dòng đại diện cho 1 URL đến  kho lưu trữ phần mềm bao gồm các thông tin:
   ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/106e2fab-4194-424c-971c-726971a27878)
-  
-  - Loại kho lưu trữ: ppa, deb
-  - Vị trí của kho lưu trữ: URL
-  - Tên Repo: jammy,...
-  - Vesion Repo: multiverse
+ 
 - Tùy thuộc vào bản HĐH được phân phối thì sẽ có những cách cài đặt phần mềm riêng:
   - Sử dụng APT: `sudo apt install [name_pm]`
   - Sử dụng từ tệp `*.deb`: `dpkg -i *.deb` (download các file .deb về).
