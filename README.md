@@ -481,7 +481,7 @@
     - B1: Viết Scripts
       ```
       #!/bin/bash
-      #Cập nhật kho lưu trữ và cài đặt Nginx:
+      #Cập nhật kho lưu trữ và cài đặt Nginx: 
       sudo apt update && sudo apt install nginx
       #Khởi động dịch vụ Nginx:
       sudo systemctl start nginx
