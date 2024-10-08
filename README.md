@@ -881,7 +881,7 @@
      ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/0c784ec8-bbf2-482f-9ad3-78cd1e3b01aa)
 
 
-    - B2: Ta kiểm tra tốc độ đọc bằng lệnh 'sysbench fileio --file-total-size=1G --file-num=1 --file-block-size=16M --file-test-mode=seqrd --time=300 run` với tổng dung lượng của file sử dụng để kiểm tra là 1Gb, số lượng tập tin được tạo và sử dụng trong bài kiểm tra là 1, Kích thước mỗi khối là 16M, Chế độ kiểm tra là đọc tuần tự (ngoài ra còn có chế độ `rndrd`: ngãu nhiên , ) với thời gian thực hiện 300s(5p).
+    - B2: Ta kiểm tra tốc độ đọc bằng lệnh `sysbench fileio --file-total-size=1G --file-num=1 --file-block-size=16M --file-test-mode=seqrd --time=300 run` với tổng dung lượng của file sử dụng để kiểm tra là 1Gb, số lượng tập tin được tạo và sử dụng trong bài kiểm tra là 1, Kích thước mỗi khối là 16M, Chế độ kiểm tra là đọc tuần tự (ngoài ra còn có chế độ `rndrd`: ngãu nhiên , ) với thời gian thực hiện 300s(5p).
       ![image](https://github.com/huylamquang/H-H---LINUX/assets/147602556/4aa3db55-e534-46af-b0af-ee6bb9d8a325)
 
     - B3: Sau khi test xong , xóa 5GB đã tạo `sysbench --test=fileio --file-total-size=5G cleanup`
